@@ -1,0 +1,139 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "type": "positive",
+            "sparker": "my sister",
+            "thought": "surprising",
+            "observation": "said something",
+            "response": "nodded",
+            "emotions": "surprise, humor",
+            "universal": "discussion at lunch",
+            "action": "polite small talk",
+            "qualities": "polite",
+            "connectionPoint": "ask how do they do that?",
+            "user_id": "username Ben"
+        }
+    ],
+    "required": [
+        "user_id"
+    ],
+    "properties": {
+        "type": {
+            "$id": "#/properties/type",
+            "type": "string",
+            "title": "The type schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "positive"
+            ]
+        },
+        "sparker": {
+            "$id": "#/properties/sparker",
+            "type": "string",
+            "title": "The sparker schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "my sister"
+            ]
+        },
+        "thought": {
+            "$id": "#/properties/thought",
+            "type": "string",
+            "title": "The thought schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "surprising"
+            ]
+        },
+        "observation": {
+            "$id": "#/properties/observation",
+            "type": "string",
+            "title": "The observation schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "said something"
+            ]
+        },
+        "response": {
+            "$id": "#/properties/response",
+            "type": "string",
+            "title": "The response schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "nodded"
+            ]
+        },
+        "emotions": {
+            "$id": "#/properties/emotions",
+            "type": "string",
+            "title": "The emotions schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "surprise, humor"
+            ]
+        },
+        "universal": {
+            "$id": "#/properties/universal",
+            "type": "string",
+            "title": "The universal schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "discussion at lunch"
+            ]
+        },
+        "action": {
+            "$id": "#/properties/action",
+            "type": "string",
+            "title": "The action schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "polite small talk"
+            ]
+        },
+        "qualities": {
+            "$id": "#/properties/qualities",
+            "type": "string",
+            "title": "The qualities schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "polite"
+            ]
+        },
+        "connectionPoint": {
+            "$id": "#/properties/connectionPoint",
+            "type": "string",
+            "title": "The connectionPoint schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "ask how do they do that?"
+            ]
+        },
+        "user_id": {
+            "$id": "#/properties/user_id",
+            "type": "string",
+            "title": "The user_id schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "username Ben"
+            ]
+        }
+    },
+    "additionalProperties": true
+}
