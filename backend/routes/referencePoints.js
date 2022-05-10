@@ -4,30 +4,31 @@ const jsonschema = require('jsonschema')
 const express = require('express')
 const ExpressError = require('../expressError')
 const router = express.Router()
+const {ensureLoggedIn} = require('../middleware/auth')
 
 const ReferencePoint = require('../models/referencePoint')
 const directoryAddSchema = require('../schemas/directoryAdd.json')
+const stepsAddSchema = require('../schemas/stepsAdd.json')
 
-// The Culture Bump Directory consists of a form and catalogue:
-//    Form: generate reference point's 'metadata' {such as category and title} 
-//    Catalogue: list of all reference points added to the Directory
-
-router.post('/', async function(req, res, next) {
+router.post('/',  async function(req, res, next) {
     try {
-        const validator = jsonschema.validate(req.body, directoryAddSchema)
+        // console.log('hitting directory POST', req.body)
+        const validator = jsonschema.validate(req.body, stepsAddSchema)
         if (!validator.valid) {
             const errs = validator.errors.map(err => err.stack)
             throw new ExpressError(errs)
         }
 
         const referencePoint = await ReferencePoint.create(req.body)
+        // console.log('router.post(/directory POST - referencePoint', referencePoint)
+
         return res.status(201).json({referencePoint})
     } catch (err) {
         return next(err)
     }
 })
 
-router.get('/', async function(req, res, next) {
+router.get('/', ensureLoggedIn, async function(req, res, next) {
     try {
         const referencePoint = await ReferencePoint.getAll(req.query)
         return res.json({referencePoint})
@@ -36,18 +37,17 @@ router.get('/', async function(req, res, next) {
     }
 })
 
-router.get('/:id', async function(req, res, next) {
+router.get('/:id', ensureLoggedIn, async function(req, res, next) {
     try {
-        console.log(req.params.id)
+        // console.log('reference-point routes - /:id - req.params.id', req.params.id)
         const referencePoint = await ReferencePoint.get(req.params.id)
         return res.json({referencePoint})
-
     } catch(err) {
         return next(err)
     }
 })
 
-router.delete('/:id', async function(req, res, next) {
+router.delete('/:id', ensureLoggedIn, async function(req, res, next) {
     try {
         await ReferencePoint.remove(req.params.id)
         return res.json({deleted: req.params.id})

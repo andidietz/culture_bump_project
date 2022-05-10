@@ -1,25 +1,44 @@
-import React, {useState, useEfect, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {BrowserRouter} from 'react-router-dom'
 import jwt from 'jsonwebtoken'
 
 import Routes from './nav/Routes'
 import CultureBumpApi from './api/api'
 import UserContext from './context/UserConext'
-import RefContext from './context/RefContext'
 import Nav from './nav/Nav'
 import useLocalStorage from './hooks/useLocalStorage'
+import useFields from './hooks/useFields'
 
 import './App.css'
 
-const TOKEN_IN_STORAGE = "Storage-Token"
+export const TOKEN_IN_STORAGE = "Storage-Token"
 
 function App() {
-  const [infoIsLoaded, setInfoIsLoaded] = useState(false)
-  const [currentUser, setCurrentUser] = useState(null)
+  // const [infoIsLoaded, setInfoIsLoaded] = useState(false)
+  const initialState = {
+    username: '',
+    password: '',
+    type: '', 
+    spark: '', 
+    thought: '',
+    observation: '',
+    response: '',
+    emotions: '',
+    universal: '',
+    action: '',
+    qualities: '',
+    connectionPoint: '',
+    id: '',
+    headerSituation: '',
+    headerSpecification: '',
+    tag: '', 
+  }
+
+  const [currentUser, setCurrentUser] = useState('')
   const [token, setToken] = useLocalStorage(TOKEN_IN_STORAGE)
   const [userBumps, setUserBumps] = useState([])
-  const [userTags, setUserTags] = useState([])
-  const [refPoint, setRefPoint] = useState({
+  const [userTags, setUserTags] = useState([''])
+  const [refPoint, setRefPoint] = useState({    
     id: '',
     headerSituation: '',
     headerSpecification: '',
@@ -28,25 +47,28 @@ function App() {
     qualities: ''
   })
 
+  const [formData, handleChange, resetFormData] = useFields(initialState)
+
+
   useEffect(function loadUserInfo() {
     async function getCurrentUser() {
       if (token) {
         try {
           const {username} = jwt.decode(token)
+          // console.log('useEffect - getCurrentUser', username)
+
           CultureBumpApi.token = token
           const currentUser = await CultureBumpApi.getCurrentUser(username)
-          const userBumps = await CultureBumpApi.getUserBumps(username)
-          const userTags = await CultureBumpApi.getUserTags(username)
+          
+          console.log('App.js - useEffect - currentUser results', currentUser)
+
           setCurrentUser(currentUser)
-          setUserBumps(userBumps)
-          setUserTags(userTags)
         } catch (err) {
           setCurrentUser(null)
         }
       }
-      setInfoIsLoaded(true)
     }
-    setInfoIsLoaded(false)
+
     getCurrentUser()
   }, [token])
 
@@ -57,7 +79,9 @@ function App() {
 
   async function login(loginData) {
     try {
+      console.log('App.js - login function - parameters', loginData)
       const token = await CultureBumpApi.login(loginData) 
+      console.log('App.js - login function - token', token)
       setToken(token)
       return {sucess: true}
     } catch (err) {
@@ -75,28 +99,25 @@ function App() {
     }
   }
 
-
   return (
     <BrowserRouter>
-      <UserContext.Provider values={{
+      <UserContext.Provider value={{
         currentUser, 
         setCurrentUser, 
         userBumps, 
         setUserBumps,
         userTags, 
-        setUserTags
+        setUserTags,
+        refPoint, 
+        setRefPoint,
+        formData,
+        handleChange, 
+        resetFormData
       }}>
-        <RefContext.Provider values={{
-          currentUser, 
-          setCurrentUser, 
-          refPoint, 
-          setRefPoint
-        }}>
-          <div>
-            <Nav logout={logout}/>
-            <Routes login={login} signup={signup} />
-          </div>
-        </RefContext.Provider>
+        <div>
+          <Nav logout={logout}/>
+          <Routes login={login} signup={signup} />
+        </div>
       </UserContext.Provider>
     </BrowserRouter>
   )

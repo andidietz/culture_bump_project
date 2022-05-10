@@ -29,7 +29,7 @@ router.post('/', async function(req, res, next) {
 
 router.get('/:id', async function(req, res, next) {
     try {
-        console.log(req.params.id)
+        console.log('directory - route /:id - req.params.id', req.params.id)
         const referencePoint = await ReferencePoint.get(req.params.id)
         return res.json({referencePoint})
 

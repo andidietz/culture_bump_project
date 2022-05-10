@@ -3,7 +3,7 @@ import axios from 'axios'
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001"
 
 class CultureBumpApi {
-  static token
+  static token;
 
   static async request(endpoint, data={}, method="get") {
     const url = `${BASE_URL}/${endpoint}`
@@ -19,12 +19,18 @@ class CultureBumpApi {
   }
 
   static async login(data) {
-    const res = await this.request(`auth/token`, data, 'post')
+    const {username, password} = data
+    const requestData = {
+      username, password
+    }
+    console.log('Api login - data', requestData)
+    const res = await this.request(`users/token`, requestData, 'post')
     return res.token
   }
 
   static async signup(data) {
-    const res = await this.request(`auth/register`, data, 'post')
+    console.log('hitting signup api', data)
+    const res = await this.request(`users/register`, data, 'post')
     return res.token
   }
 
@@ -33,13 +39,18 @@ class CultureBumpApi {
     return res.user
   }
 
+  // Bug here
   static async getCurrentUser(username) {
+    console.log('getUser', username)
     const res = await this.request(`users/${username}`)
+    
     return res.user
   }
 
   static async getUserBumps(username) {
     const res = await this.request(`users/${username}/reference-points`)
+    console.log('getUserBumps - ', username, ', res', res)
+
     return res.userBumps
   }
 
@@ -50,11 +61,16 @@ class CultureBumpApi {
 
   static async getUserBookmarks(username) {
     const res = await this.request(`/users/${username}/bookmarks`)
+    return res.bookmarks
   }
 
-  static async deleteRefPoint(id) {
-    const res = await this.request(`directory/${id}`)
-    return res.refPoint
+  static async addBump(data) {
+    console.log('Api - addBump(data) - data', data)
+
+    const res = await this.request('directory', data, 'post')
+    console.log('Api -addBump res', res)
+
+    return res.bump
   }
 
   static async addRefPoint(id) {
@@ -77,5 +93,9 @@ class CultureBumpApi {
     return res.refPoint
   }
 }
+
+CultureBumpApi.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
+    "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
+    "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc"
 
 export default CultureBumpApi

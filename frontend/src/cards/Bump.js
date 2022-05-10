@@ -2,18 +2,19 @@ import React, { useContext } from 'react'
 import RefContext from '../context/RefContext'
 
 
-const Bump = (
-  type, 
-  spark, 
-  thought,
-  obvervation,
-  response,
-  emotions,
-  universal,
-  action,
-  qualities,
-  connectionPoint
-) => {
+const Bump = () => {
+  const {
+    type, 
+    spark, 
+    thought,
+    obvervation,
+    response,
+    emotions,
+    universal,
+    action,
+    qualities,
+    connectionPoint
+  } = useContext(RefContext)
 
   return (
     <div>

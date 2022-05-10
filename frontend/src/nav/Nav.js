@@ -3,8 +3,9 @@ import {Link, NavLink} from 'react-router-dom'
 import UserContext from '../context/UserConext'
 
 const Nav = ({logout}) => {
+  console.debug("Navigation", "currentUser=", currentUser);
+
   const {currentUser} = useContext(UserContext)
- 
   const loggedInNav = () => {
     return (
       <ul>
@@ -19,7 +20,7 @@ const Nav = ({logout}) => {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/users/${currentUser}`}>
+          <NavLink to={`/users/${currentUser.username}`}>
             Profile
           </NavLink>
         </li>
@@ -36,12 +37,12 @@ const Nav = ({logout}) => {
     return (
       <ul>
         <li>
-          <NavLink to='/signup'>
+          <NavLink to='/users/signup'>
             Sign Up
           </NavLink>
         </li>
         <li>
-          <NavLink to='/login'>
+          <NavLink to='/users/login'>
             Login
           </NavLink>
         </li>

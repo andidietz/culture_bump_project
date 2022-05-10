@@ -1,5 +1,6 @@
 import React from 'react'
 import {Switch, Route, Redirect} from 'react-router-dom'
+import PrivateRoute from './PrivateRoute'
 import Login from '../auth/Login'
 import Signup from '../auth/Signup'
 
@@ -13,7 +14,8 @@ import Profile from '../profiles/Profile'
 
 import StepsAdd from '../steps/Add'
 
-const Routes = () => {
+const Routes = ({login, signup}) => {
+
 	return (
 		<div>
 			<Switch>
@@ -22,15 +24,15 @@ const Routes = () => {
 				</Route>
 
 				<Route exact path='/users/login'>
-					<Login/>
+					<Login login={login}/>
 				</Route>
 
 				<Route exact path='/users/signup'>
-					<Signup/>
+					<Signup signup={signup}/>
 				</Route>
 
 				<Route exact path='/users/:username'>
-					<Profile/>
+					<Profile foo={'foo'}/>
 				</Route>
 
 				<Route exact path='/users/:username/update'>
@@ -56,6 +58,8 @@ const Routes = () => {
 				<Route exact path='/steps/add'>
 					<StepsAdd/>
 				</Route>
+
+				<Redirect to='/'/>
 			</Switch>
 		</div>
 	)

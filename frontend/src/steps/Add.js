@@ -10,14 +10,22 @@ import {useHistory} from 'react-router-dom'
   step6Tips,
   step7Tips
 } from '../components/StepTips'
+import CultureBumpApi from '../api/api'
 
-const StepsAddForm = ({formData, handleChange, resetFormData}) => {
- const history = useHistory()
- const {username} = useContext(UserContext)
+const StepsAddForm = () => {
+  console.log('hitting StepsAddForm')
+  const history = useHistory()
+  const {currentUser, formData, handleChange, resetFormData} = useContext(UserContext)
 
-  const handleSumbit = event => {
+  const {username} = currentUser
+
+  async function handleSubmit(event) {
     event.preventDefault()
     resetFormData()
+    formData.username = username
+    await CultureBumpApi.addBump(formData)
+    console.log('StepForm - handleSubmit - formData', formData)
+
     history.push(`/users/${username}`)
   }
 
@@ -25,7 +33,7 @@ const StepsAddForm = ({formData, handleChange, resetFormData}) => {
     type, 
     spark, 
     thought,
-    obvervation,
+    observation,
     response,
     emotions,
     universal,
@@ -35,7 +43,7 @@ const StepsAddForm = ({formData, handleChange, resetFormData}) => {
   } = formData
 
   return (
-    <form onSubmit={handleSumbit}>
+    <form>
       <h1>8 Step Tool</h1>
       <h2><span>Detach</span> from the culture bump</h2>
 
@@ -70,12 +78,12 @@ const StepsAddForm = ({formData, handleChange, resetFormData}) => {
         onChange={handleChange}
       />
 
-      <h2><span>Step 2</span> Describe What The Other Person(s) Did</h2>
+      <h2><span>Step 2</span> {`Describe What The Other Person(s) Did`}</h2>
       {step2Tips}
       <button>Tips</button>
       <label>
-        What did the other person(s) do or say? 
-        Or, in case of an object, describe it physically.
+        {`What did the other person(s) do or say? 
+        Or, in case of an object, describe it physically.`}
       </label>
       <input 
         id='observation'
@@ -83,11 +91,11 @@ const StepsAddForm = ({formData, handleChange, resetFormData}) => {
         placeholder=
           {'ex: they looked at the sign that said "No Entrance" and walked into the door'}
         type='text'
-        value={obvervation}
+        value={observation}
         onChange={handleChange}
       />
  
- <    h2><span>Step 3</span> Describe What You Did</h2>
+      <h2><span>Step 3</span> Describe What You Did</h2>
       {step3Tips}
       <button>Tips</button>
       <label>What did I do or say?</label>
@@ -122,12 +130,12 @@ const StepsAddForm = ({formData, handleChange, resetFormData}) => {
       {step5Tips}
       <button>Tips</button>
       <label>
-        Now let's find a universal situation for your culture bump. 
+        {`Now let's find a universal situation for your culture bump. 
         It will be something that could happen to anyone from anywhere, 
         like arriving late or feeling hungry in class or a meeting. 
 
         Find the universal situation in this incident. 
-        (What is the situation that they were responding to?)
+        (What is the situation that they were responding to?)`}
       </label>
       <input 
         id='universal'
@@ -165,8 +173,8 @@ const StepsAddForm = ({formData, handleChange, resetFormData}) => {
       {step7Tips}
       <button>Tips</button>
       <label>
-        When people in my culture (or group) do the actions 
-        I listed in Step 6, I say they are being:
+        {`When people in my culture (or group) do the actions 
+        I listed in Step 6, I say they are being:`}
       </label>
       <input 
         id='qualities'
@@ -185,10 +193,10 @@ const StepsAddForm = ({formData, handleChange, resetFormData}) => {
       </h2>
       <button>Tips</button>
       <label>
-        How does the other person(s) you had the culture bump with express 
+        {`How does the other person(s) you had the culture bump with express 
         the qualities you listed in Step 7? (If you do not know, consider 
         starting a conversation with a question like, "How do you like to show 
-        (a quality from Step 7)?"
+        (a quality from Step 7))?"`}
       </label>
       <input 
         id='connectionPoint'
@@ -202,18 +210,8 @@ const StepsAddForm = ({formData, handleChange, resetFormData}) => {
         value={connectionPoint}
         onChange={handleChange}
       />
-      <button>Submit</button>
-    </form>
-
-
-
-
-
-  
-
-    
-
-    
+      <button onClick={handleSubmit}>Submit</button>
+    </form> 
   )
 }
 

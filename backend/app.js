@@ -1,9 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const ExpressError = require('./expressError')
+const {authenticateJWT} = require('./middleware/auth')
 
-// const directoryRoutes = require('./routes/directory')
-// const eightStepsRoutes = require('./routes/eightSteps')
 const referencPointsRoutes = require('./routes/referencePoints')
 const userRoutes = require('./routes/user')
 
@@ -13,14 +12,9 @@ app.use(express.json())
 
 
 app.use('/directory', referencPointsRoutes)
-app.use('/eight-steps', referencPointsRoutes)
+app.use('/steps', referencPointsRoutes)
 app.use('/users', userRoutes)
-
-app.get('/', function(req, res) {
-    res.send({
-        company: 'Culture'
-    })
-})
+app.use(authenticateJWT)
 
 app.use(function(req, res, next) {
     const notFoundError = new ExpressError('Not Found', 404)

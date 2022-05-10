@@ -15,31 +15,35 @@ class User {
         )
 
         const user = results.rows[0]
-
+        console.log('models - login - query results', user)
         if (user) {
-            const isValidUser = await bcrypt.compare(password, username.password)
+            const isValidUser = await bcrypt.compare(password, user.password)
+            console.log('models - isValidUser', isValidUser)
+
             if (isValidUser === true) {
                 delete user.password
                 return user
             }
         }
-
+        console.log('models - user - validated', user)
         throw new ExpressError('Invalid username or password')
     }
 
     static async register({username, email, name, password}) {
-        const duplicateCheck = await db.query(
-            `SELECT username
-            FROM users
-            WHERE username = $1`, [username]
-        )
+        console.log('modules/users/register - username, email, name, password', username, email, name, password)
+        // const duplicateCheck = await db.query(
+        //     `SELECT username
+        //     FROM users
+        //     WHERE username = $1
+        //     RETURNING username, email, name`, [username]
+        // )
 
-        if (duplicateCheck.rows[0]) {
-            throw new ExpressError('Username already in use')
-        }
-
+        // if (duplicateCheck.rows[0]) {
+        //     throw new ExpressError('Username already in use')
+        // }
         const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR)
-
+        console.log('modules/users/register - hashedPassword', hashedPassword)
+        
         const results = await db.query(
             `INSERT INTO users
             (username, email, password, name)
@@ -50,6 +54,8 @@ class User {
         )
 
         const user = results.rows[0]
+        console.log('modules/users/register - user', user)
+
         return user
     }
 
@@ -97,7 +103,7 @@ class User {
 
         const userReferencePoints = results.rows
         if (!userReferencePoints) throw new ExpressError(`Not Found`)
-
+        console.log('userReferencePoints', userReferencePoints)
         return userReferencePoints
     }
 
@@ -105,7 +111,7 @@ class User {
         const results = await db.query(
             `SELECT t.tag
             FROM tags AS t
-            JOIN tags_reference_points AS tp 
+            JOIN users_tags AS ut 
                 ON t.id = ut.tag_id
             JOIN users AS u 
                 ON ut.user_id = u.username 

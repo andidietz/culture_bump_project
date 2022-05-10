@@ -4,69 +4,84 @@ const ExpressError = require('../expressError')
 const Tag = require('./tag')
 
 class ReferencePoint {
-    static async create({type,
-        sparker,
-        thought,
-        observation, 
-        response,
-        emotions, 
-        universal,
-        action,
-        qualities,
-        connection_point,
-        username}) {
-            const results = await db.query(
-                `INSERT INTO reference_points
-                (type, sparker, thought, observation, emotions, universal,
-                    action, qualities, connection_point, user_id)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-                RETURNING type, 
-                    sparker, 
-                    thought, 
-                    observation, 
-                    response,
-                    emotions, 
-                    universal,
-                    action,
-                    qualities,
-                    connection_point,
-                    username`,
-                [
-                    type, 
-                    sparker, 
-                    thought, 
-                    observation, 
-                    response,
-                    emotions, 
-                    universal,
-                    action,
-                    qualities,
-                    connection_point,
-                    username
-                ]
-            )
-            const referencePoint = results.rows[0]
-            return referencePoint
-        }
+  static async create({type,
+    spark,
+    thought,
+    observation, 
+    response,
+    emotions, 
+    universal,
+    action,
+    qualities,
+    connectionPoint,
+    username}) {
+    // console.log('models/ create' )
+    // console.log('models/ create - var', type,
+    // spark,
+    // thought,
+    // observation, 
+    // response,
+    // emotions, 
+    // universal,
+    // action,
+    // qualities,
+    // connectionPoint,
+    // username )
+    // START POINT _ BELOW BUG
+    const results = await db.query(
+      `INSERT INTO reference_points
+      (type, sparker, thought, observation, response, emotions, universal,
+        action, qualities, connection_point,
+        user_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      RETURNING type, 
+          sparker, 
+          thought, 
+          observation, 
+          response,
+          emotions, 
+          universal,
+          action,
+          qualities,
+          connection_point,
+          user_id`,
+        [
+          type, 
+          spark, 
+          thought, 
+          observation, 
+          response,
+          emotions, 
+          universal,
+          action,
+          qualities,
+          connectionPoint,
+          username
+        ]
+      )
+      const referencePoint = results.rows[0]
+    //   console.log('models/refPoint/ - create - referencePoint', referencePoint)
+      return referencePoint
+  }
     
-        static async getAll() {
-            const results = await db.query(
-                `SELECT type, 
-                    sparker, 
-                    thought, 
-                    observation, 
-                    response,
-                    emotions, 
-                    universal,
-                    action,
-                    qualities,
-                    connection_point,
-                    user_id
-                FROM reference_points`)
-    
-            const referencePoint = results.rows
-            return referencePoint
-        }
+    static async getAll() {
+        const results = await db.query(
+            `SELECT type, 
+                sparker, 
+                thought, 
+                observation, 
+                response,
+                emotions, 
+                universal,
+                action,
+                qualities,
+                connection_point,
+                user_id
+            FROM reference_points`)
+
+        const referencePoint = results.rows
+        return referencePoint
+    }
 
         static async getAll(filters = {}) {
             let query = `SELECT r.type,
@@ -100,7 +115,7 @@ class ReferencePoint {
     
             if (tag) {
                 values.push(tag)
-                console.log('values', values)
+                // console.log('values', values)
                 whereStatement.push(`
                     JOIN tags_reference_points AS tp 
                         ON r.id = tp.reference_point_id
@@ -109,7 +124,7 @@ class ReferencePoint {
                     WHERE t.id = $1
                 `)
                 query += whereStatement
-                console.log(query)
+                // console.log(query)
             }
             
             

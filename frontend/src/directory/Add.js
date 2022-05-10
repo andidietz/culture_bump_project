@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom'
 
 const DirectoryAdd = ({formData, handleChange, resetFormData}) => {
   const history = useHistory()
-  const isTitleProvided = false
+  let titleComponents;
 
   const handleSumbit = event => {
     event.preventDefault()
@@ -19,33 +19,29 @@ const DirectoryAdd = ({formData, handleChange, resetFormData}) => {
     subcategory
   } = formData
 
-  // const compentent = (
-  //     <div>
-  //       <p>
-  //         Does the Title below sound right? 
-  //         Edit the grammar your answers above if needed
-  //       </p>
-  //       <p>{formatTitle(headerSituation)} {formatTitle(headerSpecification)} {formatTitle(tag)}</p>
-  //     </div>
-  // )
-  const provideTitle = () => {
-    isTitleProvided = true
-  }
+  // const provideTitle = () => {
+  //   isTitleProvided = true
+  // }
 
   const formatTitle = (event) => {
+    // Check to see if all three have values, tell them to complete all 3 if not done
     const headerSituation = event.target.headerSituation.value
     const headerSpecification = event.target.headerSpecification.value
     const tag = event.target.tag.value
 
-    return (
-      <div>
-        <p>
-          Does the Title below sound right? 
-          Edit the grammar your answers above if needed
-        </p>
-        <p>{headerSituation} {headerSpecification} {tag}</p>
-      </div>
-    )
+    if (headerSituation && headerSpecification && tag) {
+      titleComponents = (
+        <div>
+          <p>
+            Does the Title below sound right? 
+            Edit the grammar your answers above if needed
+          </p>
+          <p>{headerSituation} {headerSpecification} {tag}</p>
+        </div>
+      )
+      
+      return titleComponents
+    }
   }
 
   return (
@@ -90,8 +86,8 @@ const DirectoryAdd = ({formData, handleChange, resetFormData}) => {
           value={tag}
           onChange={handleChange}/>
         <input />
-        <button onClick={provideTitle}>Format Title</button>
-        {isTitleProvided ? formatTitle() : null}
+        <button onClick={formatTitle}>Format Title</button>
+        {titleComponents ? titleComponents : <p>please fill out all of the above questions</p>}
         <p>{headerSituation} {headerSpecification} {tag}</p>
         <h2>Pick The Categories</h2>
         <label>

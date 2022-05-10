@@ -17,11 +17,11 @@
             "action": "polite small talk",
             "qualities": "polite",
             "connectionPoint": "ask how do they do that?",
-            "user_id": "username Ben"
+            "username": "username Ben"
         }
     ],
     "required": [
-        "user_id"
+        "username"
     ],
     "properties": {
         "type": {
@@ -124,10 +124,10 @@
                 "ask how do they do that?"
             ]
         },
-        "user_id": {
-            "$id": "#/properties/user_id",
+        "username": {
+            "$id": "#/properties/username",
             "type": "string",
-            "title": "The user_id schema",
+            "title": "The username schema",
             "description": "An explanation about the purpose of this instance.",
             "default": "",
             "examples": [

@@ -1,17 +1,18 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {useHistory} from 'react-router-dom'
+import UserContext from '../context/UserConext'
 
-const Signup = ({formData, handleChange, resetFormData}) => {
+const Signup = ({signup}) => {
   const history = useHistory()
+  const {formData, handleChange, resetFormData} = useContext(UserContext)
+  const {name, username, password, email} = formData
 
-  const handleSumbit = event => {
+  async function handleSumbit(event) {
     event.preventDefault()
     resetFormData()
-    const {username} = event.target.username.value
-    history.push(`/users/${username}`)
+    await signup(formData)
+    history.push(`/users/${formData.username}`)
   }
-
-  const {name, username, password} = formData
 
   return (
     <div>
@@ -20,18 +21,28 @@ const Signup = ({formData, handleChange, resetFormData}) => {
         <input 
           id='name'
           name='name'
+          placeholder='name'
           type='text'
           value={name}
           onChange={handleChange}/>
         <input 
           id='username'
           name='username'
+          placeholder='username'
           type='text'
           value={username}
           onChange={handleChange}/>
         <input 
+          id='email'
+          name='email'
+          placeholder='email'
+          type='text'
+          value={email}
+          onChange={handleChange}/>
+        <input 
           id='password'
           name='password'
+          placeholder='password'
           type='text'
           value={password}
           onChange={handleChange}/>
