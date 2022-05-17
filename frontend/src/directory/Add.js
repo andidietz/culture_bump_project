@@ -5,6 +5,45 @@ const DirectoryAdd = ({formData, handleChange, resetFormData}) => {
   const history = useHistory()
   let titleComponents;
 
+
+  
+
+
+
+
+  // State
+  const INITIAL_STATE = {
+    catId: {
+      catTitle: '',
+      isToggleOn: false,
+    },
+    catId: {
+      catTitle: '',
+      isToggleOn: false,
+      subcats: {
+        subcatId: {
+          subcatTitle: '',
+          isToggleOn: false,
+          universals: [
+            {universalId: 0,
+            universal: ''}
+          ]}
+      }
+    }
+  }
+
+    // updating
+
+  // exampleDirectory[11].subcats = {
+  //   1: {
+  //     subcatTitle: 'classroom',
+  //       universals: [
+  //         'When I arrive late', 
+  //       ]
+  //     }
+  // }
+
+
   const handleSumbit = event => {
     event.preventDefault()
     resetFormData()

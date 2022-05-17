@@ -55,9 +55,11 @@ function App() {
       if (token) {
         try {
           const {username} = jwt.decode(token)
-          // console.log('useEffect - getCurrentUser', username)
+          console.log('useEffect - getCurrentUser', username)
 
           CultureBumpApi.token = token
+          console.log('useEffect - CultureBumpApi.token', token)
+
           const currentUser = await CultureBumpApi.getCurrentUser(username)
           
           console.log('App.js - useEffect - currentUser results', currentUser)
@@ -79,7 +81,7 @@ function App() {
 
   async function login(loginData) {
     try {
-      console.log('App.js - login function - parameters', loginData)
+      // console.log('App.js - login function - parameters', loginData)
       const token = await CultureBumpApi.login(loginData) 
       console.log('App.js - login function - token', token)
       setToken(token)

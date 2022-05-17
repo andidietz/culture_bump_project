@@ -12,7 +12,7 @@ const ProfileUpdate = () => {
 
   const {name, username, password, userTags} = formData
 
-  const handleSumbit = event => {
+  const handleSubmit = event => {
     event.preventDefault()
     resetFormData()
     const {username} = event.target.username.value
@@ -22,7 +22,7 @@ const ProfileUpdate = () => {
   return (
     <div>
       <h1>Update Profile</h1>
-      <form onSubmit={handleSumbit}>
+      <form onSubmit={handleSubmit}>
       <input 
           id='name'
           name='name'

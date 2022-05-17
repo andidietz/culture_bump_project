@@ -15,22 +15,22 @@ class User {
         )
 
         const user = results.rows[0]
-        console.log('models - login - query results', user)
+        // console.log('models - login - query results', user)
         if (user) {
             const isValidUser = await bcrypt.compare(password, user.password)
-            console.log('models - isValidUser', isValidUser)
+            // console.log('models - isValidUser', isValidUser)
 
             if (isValidUser === true) {
                 delete user.password
                 return user
             }
         }
-        console.log('models - user - validated', user)
+        // console.log('models - user - validated', user)
         throw new ExpressError('Invalid username or password')
     }
 
     static async register({username, email, name, password}) {
-        console.log('modules/users/register - username, email, name, password', username, email, name, password)
+        // console.log('modules/users/register - username, email, name, password', username, email, name, password)
         // const duplicateCheck = await db.query(
         //     `SELECT username
         //     FROM users
@@ -42,7 +42,7 @@ class User {
         //     throw new ExpressError('Username already in use')
         // }
         const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR)
-        console.log('modules/users/register - hashedPassword', hashedPassword)
+        // console.log('modules/users/register - hashedPassword', hashedPassword)
         
         const results = await db.query(
             `INSERT INTO users
@@ -54,7 +54,7 @@ class User {
         )
 
         const user = results.rows[0]
-        console.log('modules/users/register - user', user)
+        // console.log('modules/users/register - user', user)
 
         return user
     }
@@ -103,7 +103,7 @@ class User {
 
         const userReferencePoints = results.rows
         if (!userReferencePoints) throw new ExpressError(`Not Found`)
-        console.log('userReferencePoints', userReferencePoints)
+        // console.log('userReferencePoints', userReferencePoints)
         return userReferencePoints
     }
 
@@ -123,8 +123,6 @@ class User {
 
         return userReferencePoints
     }
-
-
 
     static async remove(username) {
         const results = await db.query(

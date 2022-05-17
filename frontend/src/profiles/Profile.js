@@ -5,14 +5,13 @@ import UserContext from '../context/UserConext'
 import CultureBumpApi from '../api/api'
 
 // Need to toggle My Bookmarks on button click
-const Profile = (props) => {
-  console.log('foo', props)
-
+const Profile = () => {
   const history = useHistory()
-  console.log('history', history)
-  console.log('UserContext', UserContext)
+  // console.log('history', history)
+  // console.log('UserContext', UserContext)
 
   const userInfo = useContext(UserContext)
+  const {setUserBumps, setUserTags, userTags, userBumps} = userInfo
   const {username, name, email} = userInfo.currentUser
 
   console.log('userInfo', userInfo)

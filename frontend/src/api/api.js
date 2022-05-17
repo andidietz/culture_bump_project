@@ -41,7 +41,7 @@ class CultureBumpApi {
 
   // Bug here
   static async getCurrentUser(username) {
-    console.log('getUser', username)
+    console.log('Api.js - getCurrentUser', username)
     const res = await this.request(`users/${username}`)
     
     return res.user
