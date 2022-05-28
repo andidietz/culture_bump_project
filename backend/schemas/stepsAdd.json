@@ -8,7 +8,7 @@
     "examples": [
         {
             "type": "positive",
-            "sparker": "my sister",
+            "spark": "my sister",
             "thought": "surprising",
             "observation": "said something",
             "response": "nodded",
@@ -34,10 +34,10 @@
                 "positive"
             ]
         },
-        "sparker": {
+        "spark": {
             "$id": "#/properties/sparker",
             "type": "string",
-            "title": "The sparker schema",
+            "title": "The spark schema",
             "description": "An explanation about the purpose of this instance.",
             "default": "",
             "examples": [

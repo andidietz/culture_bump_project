@@ -8,36 +8,17 @@ import UserContext from './context/UserConext'
 import Nav from './nav/Nav'
 import useLocalStorage from './hooks/useLocalStorage'
 import useFields from './hooks/useFields'
+import Loading from './components/Loading'
 
 import './App.css'
 
 export const TOKEN_IN_STORAGE = "Storage-Token"
 
 function App() {
-  // const [infoIsLoaded, setInfoIsLoaded] = useState(false)
-  const initialState = {
-    username: '',
-    password: '',
-    type: '', 
-    spark: '', 
-    thought: '',
-    observation: '',
-    response: '',
-    emotions: '',
-    universal: '',
-    action: '',
-    qualities: '',
-    connectionPoint: '',
-    id: '',
-    headerSituation: '',
-    headerSpecification: '',
-    tag: '', 
-  }
-
+  const [infoLoaded, setInfoLoaded] = useState(false)
   const [currentUser, setCurrentUser] = useState('')
   const [token, setToken] = useLocalStorage(TOKEN_IN_STORAGE)
-  const [userBumps, setUserBumps] = useState([])
-  const [userTags, setUserTags] = useState([''])
+  const [userTags, setUserTags] = useState([])
   const [refPoint, setRefPoint] = useState({    
     id: '',
     headerSituation: '',
@@ -47,30 +28,24 @@ function App() {
     qualities: ''
   })
 
-  const [formData, handleChange, resetFormData] = useFields(initialState)
-
-
   useEffect(function loadUserInfo() {
     async function getCurrentUser() {
       if (token) {
         try {
           const {username} = jwt.decode(token)
-          console.log('useEffect - getCurrentUser', username)
 
           CultureBumpApi.token = token
-          console.log('useEffect - CultureBumpApi.token', token)
 
           const currentUser = await CultureBumpApi.getCurrentUser(username)
-          
-          console.log('App.js - useEffect - currentUser results', currentUser)
 
           setCurrentUser(currentUser)
         } catch (err) {
           setCurrentUser(null)
         }
       }
+      setInfoLoaded(true)
     }
-
+    setInfoLoaded(false)
     getCurrentUser()
   }, [token])
 
@@ -81,9 +56,7 @@ function App() {
 
   async function login(loginData) {
     try {
-      // console.log('App.js - login function - parameters', loginData)
       const token = await CultureBumpApi.login(loginData) 
-      console.log('App.js - login function - token', token)
       setToken(token)
       return {sucess: true}
     } catch (err) {
@@ -101,20 +74,15 @@ function App() {
     }
   }
 
+  if (!infoLoaded) return <Loading/>
+
   return (
     <BrowserRouter>
       <UserContext.Provider value={{
         currentUser, 
-        setCurrentUser, 
-        userBumps, 
-        setUserBumps,
+        setCurrentUser,
         userTags, 
-        setUserTags,
-        refPoint, 
-        setRefPoint,
-        formData,
-        handleChange, 
-        resetFormData
+        setUserTags
       }}>
         <div>
           <Nav logout={logout}/>

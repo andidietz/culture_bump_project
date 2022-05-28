@@ -2,14 +2,23 @@ const db = require('../db')
 const ExpressError = require('../expressError')
 
 class HeaderSituation {
-    static async create({headerSituation}) {
+    static async create(newHeaderSituation) {
         const results = await db.query(
             `INSERT INTO header_situations (header_situation)   
             VALUES ($1)
-            RETURNING header_situations`, [headerSituation])
+            RETURNING id`, [newHeaderSituation])
 
-        const headerSituation = results.rows[0]
-        return headerSituation
+        const headerSituationId = results.rows[0]
+        return headerSituationId
+    }
+
+    static async getAll(id) {
+        const results = await db.query(
+            `SELECT id, header_situation
+            FROM header_situations`)
+
+        const headerSituations = results.rows
+        return headerSituations
     }
 
     static async get(id) {
@@ -18,20 +27,20 @@ class HeaderSituation {
             FROM header_situations
             WHERE id = $1`, [id])
 
-        const headerSituation = results.row[0]
-        return headerSituation
-    }
-
-    static async update(id, headerSituation) {
-        const results = await db.query(
-            `UPDATE header_situations
-            SET header_situation = $2
-            WHERE id = $1
-            RETURNING header_situation`, [id, headerSituation])
-
         const headerSituation = results.rows[0]
         return headerSituation
     }
+
+    // static async update(id, headerSituation) {
+    //     const results = await db.query(
+    //         `UPDATE header_situations
+    //         SET header_situation = $2
+    //         WHERE id = $1
+    //         RETURNING header_situation`, [id, headerSituation])
+
+    //     const headerSituation = results.rows[0]
+    //     return headerSituation
+    // }
 
     static async remove(id) {
         const results = await db.query(

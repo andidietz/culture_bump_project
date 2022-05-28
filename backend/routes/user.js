@@ -6,6 +6,7 @@ const ExpressError = require('../expressError')
 const router = express.Router()
 
 const User = require('../models/user')
+const Tag = require('../models/tag')
 const Bookmark = require('../models/bookmark')
 
 const {ensureCorrectUser} = require('../middleware/auth')
@@ -16,13 +17,12 @@ const { createToken } = require('../helper/tokens')
 router.post('/register', async function(req, res, next) {
     try {
         const validator = jsonschema.validate(req.body, userRegisterSchema)
-        // console.log('routes/users/register - validator', validator.valid)
 
         if (!validator.valid) {
             const errs = validator.errors.map(err => err.stack)
             throw new ExpressError(errs)
         }
-        // console.log('routes/users/register - req.body', req.body)
+
         const user = await User.register(req.body)
         const token = createToken(user)
         return res.status(201).json({token})
@@ -45,7 +45,6 @@ router.post('/token', async function(req, res, next) {
         // console.log('router.post(/login - user', user)
 
         const token = createToken(user)
-        console.log('router.post(/login - token', token)
 
         return res.status(201).json({token})
     } catch (err) {
@@ -53,12 +52,41 @@ router.post('/token', async function(req, res, next) {
     }
 })
 
+router.get('/tags', async function(req, res, next) {
+    // console.log('hitting routes/user - getAlltags')
+    try {
+        // console.log('hitting routes/user - getAlltags')
+        const tags = await Tag.getAll()
+        // console.log('routes/user - Results - getAlltags', tags)
+        return res.json({tags})
+    } catch (err) {
+        return next(err)
+    }
+})
+
+
+router.patch('/:username', async function (req, res, next) {
+    try {
+        const validator = jsonschema.validate(req.body, userUpdateSchema)
+        if (!validator.valid) {
+            const errs = validator.errors.map(err => err.stack)
+            throw new ExpressError(errs)
+        }
+
+        const user = await User.update(req.params.username, req.body)
+        return res.json({user})
+    } catch (err) {
+        return next(err)
+    }
+})
+
+
 
 router.get('/:username', async function(req, res, next) {
     try {
         // console.log('req.params.username', req.params.username)
         const user = await User.get(req.params.username)
-        console.log('User Routes - GET - /:username', user)
+        // console.log('User Routes - GET - /:username', user)
         return res.json({user})
     } catch (err) {
         return next(err)
@@ -75,10 +103,10 @@ router.get('/:username', async function(req, res, next) {
 //     }
 // })
 
-router.get('/:username/reference-points', async function(req, res, next) {
+router.get('/:username/referencePoints', async function(req, res, next) {
     try {
-        // console.log('hitting routes/user - referencePoints', referencePoints)
-        const referencePoints = await User.getAllReferencePoints(req.params.username)
+        // console.log('hitting routes/user - referencePoints', req.params.username)
+        const referencePoints = await User.getUserReferencePoints(req.params.username)
         // console.log('routes/user - Results - referencePoints', referencePoints)
         return res.json({referencePoints})
     } catch (err) {
@@ -86,10 +114,37 @@ router.get('/:username/reference-points', async function(req, res, next) {
     }
 })
 
-router.get('/:username/tags', ensureCorrectUser, async function(req, res, next) {
+router.get('/:username/tags', async function(req, res, next) {
     try {
-        const userTags = User.getUsersTags(req.params.username)
-        return res.json({userTags})
+        const tags = await User.getUserTags(req.params.username)
+        // console.log('routes Get Results - tags', tags)
+
+        return res.json({tags})
+    } catch (err) {
+        return next(err)
+    }
+})
+
+router.post('/:username/tags', async function(req, res, next) {
+    try {
+        // console.log('------req.body', req.body.tag)
+        let tagId;
+        if (typeof req.body.tag === 'string') {
+            const tag = await Tag.create(req.body)
+            tagId = tag.id
+            // console.log('Switch if', tagId)
+        } else {
+            tagId = req.body.tag.id   
+            // console.log("Switch else",  tagId)
+        }
+
+        const tagInfo ={
+            username: req.params.username,
+            tagId: tagId
+        }
+        
+        const tag = await User.addUserTag(tagInfo)
+        return res.status(201).json({tag})
     } catch (err) {
         return next(err)
     }

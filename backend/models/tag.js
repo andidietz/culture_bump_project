@@ -2,14 +2,25 @@ const db = require('../db')
 const ExpressError = require('../expressError')
 
 class Tag {
-    static async create({tagId}) {
+    static async create({tag}) {
+        // console.log('Models Post tag', tag)
         const results = await db.query(
             `INSERT INTO tags (tag)   
             VALUES ($1)
-            RETURNING tag`, [tagId])
+            RETURNING id`, [tag])
+        // console.log('Models Post tag results', results)
+        const tagId = results.rows[0]
+        return tagId
+    }
 
-        const tag = results.rows[0]
-        return tag
+    static async getAll() {
+        // console.log('------------------Tag Model - getAll')
+        const results = await db.query(
+            `SELECT id, tag
+            FROM tags`)
+
+        const tags = results.rows
+        return tags
     }
 
     static async get(id) {
@@ -21,6 +32,8 @@ class Tag {
         const tag = results.row[0]
         return tag
     }
+
+
 
     static async update(id, tagId) {
         const results = await db.query(

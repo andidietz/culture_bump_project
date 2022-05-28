@@ -59,6 +59,13 @@ class User {
         return user
     }
 
+    static async update(username, data) {
+        if (data.password) {
+            data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR)
+        }
+    }
+
+
     static async get(username) {
         const results = await db.query(
             `SELECT username, email, name
@@ -72,44 +79,34 @@ class User {
         return user
     }
 
-    static async getAllReferencePoints(username) {
+    static async getUserReferencePoints(username) {
         const results = await db.query(
-            `SELECT r.type,
-                r.sparker,
-                r.thought, 
-                r.observation, 
-                r.response,
-                r.emotions, 
-                r.universal,
-                r.action,
-                r.qualities,
-                r.connection_point,
-                r.user_id, 
-                sit.header_situation, 
-                spec.header_specification, 
-                c.category, 
-                sub.subcategory
-            FROM reference_points AS r
-                JOIN header_situations AS sit 
-                    ON sit.id = r.header_situation_id
-                JOIN header_specifications AS spec 
-                    ON spec.id = r.header_specification_id
-                JOIN categories AS c 
-                    ON c.id = r.category_id
-                JOIN subcategories AS sub 
-                    ON sub.id = r.subcategory_id
-            WHERE r.user_id = $1`, [username]
+            `SELECT id,
+                type,
+                sparker,
+                thought, 
+                observation, 
+                response,
+                emotions, 
+                universal,
+                action,
+                qualities,
+                connection_point,
+                user_id
+            FROM reference_points
+            WHERE user_id = $1`, [username]
         )
-
-        const userReferencePoints = results.rows
-        if (!userReferencePoints) throw new ExpressError(`Not Found`)
-        // console.log('userReferencePoints', userReferencePoints)
-        return userReferencePoints
+            
+        const referencePoints = results.rows
+        if (!referencePoints) throw new ExpressError(`Not Found`)
+        // console.log('models - userReferencePoints', referencePoints)
+        return referencePoints
     }
 
-    static async getUsersTags(username) {
+    static async getUserTags(username) {
         const results = await db.query(
-            `SELECT t.tag
+            `SELECT t.tag,
+                t.id
             FROM tags AS t
             JOIN users_tags AS ut 
                 ON t.id = ut.tag_id
@@ -117,12 +114,30 @@ class User {
                 ON ut.user_id = u.username 
             WHERE u.username = $1`, [username]
         )
+        
+        const tags = results.rows
+        // console.log('Models - Tags', tags)
+        if (!tags) throw new ExpressError(`Not Found`)
 
-        const userReferencePoints = results.rows
-        if (!userReferencePoints) throw new ExpressError(`Not Found`)
-
-        return userReferencePoints
+        return tags
     }
+
+    static async addUserTag({username, tagId}) {
+        // console.log('Models Post Tag - data', tagId)
+        const results = await db.query(
+            `INSERT INTO users_tags
+                (user_id, tag_id)
+            VALUES ($1, $2)
+            RETURNING user_id, tag_id`, [username, tagId]
+        )
+        
+        const tag = results.rows[0]
+        // console.log('Models Post - Tags', tag)
+        if (!tag) throw new ExpressError(`Not Found`)
+
+        return tag
+    }
+
 
     static async remove(username) {
         const results = await db.query(
@@ -135,7 +150,6 @@ class User {
 
         if (!user) throw new ExpressError(`User ${username} Not Found`)
     }
-
 }
 
 module.exports = User

@@ -6,10 +6,22 @@ class Category {
         const results = await db.query(
             `INSERT INTO categories (category)   
             VALUES ($1)
-            RETURNING category`, [category])
+            RETURNING id`, [category])
 
-        const category = results.rows[0]
-        return category
+            const categoryId = results.rows[0]
+            return categoryId
+    }
+
+    static async getAll() {
+        // console.log('Models - getALL- hitting')
+        const results = await db.query(
+            `SELECT id, category
+            FROM categories`)
+        
+        // console.log('Models - getALL - results', results.rows)
+
+        const categories = results.rows
+        return categories
     }
 
     static async get(id) {
@@ -17,17 +29,6 @@ class Category {
             `SELECT category
             FROM categories
             WHERE id = $1`, [id])
-
-        const category = results.row[0]
-        return category
-    }
-
-    static async update(id, category) {
-        const results = await db.query(
-            `UPDATE categories
-            SET category = $2
-            WHERE id = $1
-            RETURNING category`, [category])
 
         const category = results.rows[0]
         return category

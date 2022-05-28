@@ -6,32 +6,89 @@ class Subcategory {
         const results = await db.query(
             `INSERT INTO subcategories (subcategory)   
             VALUES ($1)
-            RETURNING tag`, [subcategory])
+            RETURNING id`, [subcategory])
 
-        const subcategory = results.rows[0]
-        return subcategory
+
+        const subcategoryId = results.rows[0]
+        return subcategoryId
     }
 
-    static async get(id) {
+    static async getAll() {
         const results = await db.query(
-            `SELECT subcategory
-            FROM subcategories
-            WHERE id = $1`, [id])
+            `SELECT id, 
+                subcategory
+            FROM subcategories`)
 
-        const subcategory = results.row[0]
-        return subcategory
+        const subcategories = results.rows
+        return subcategories
     }
 
-    static async update(id, subcategory) {
+    static async getAllByCategoryId(id) {
         const results = await db.query(
-            `UPDATE subcategories
-            SET subcategory = $2
-            WHERE id = $1
-            RETURNING subcategory`, [subcategory])
+            `SELECT DISTINCT  
+                c.id AS categoryId, 
+                sub.subcategory,
+                sub.id AS subcategoryId
+            FROM reference_points AS r
+                JOIN categories AS c 
+                    ON c.id = r.category_id
+                JOIN subcategories AS sub 
+                    ON sub.id = r.subcategory_id
+                WHERE r.category_id = $1 
+                AND r.inDirectory = true`, [id])
 
-        const subcategory = results.rows[0]
-        return subcategory
+        const subcategories = results.rows
+        return subcategories
     }
+
+    static async getHeadersBySubcategoryId(categoryId, subcategoryId) {
+        const results = await db.query(
+            `SELECT  
+                r.id,
+                r.user_id, 
+                sit.header_situation AS headerSituation, 
+                t.tag,
+                spec.header_specification AS headerSpecification
+            FROM reference_points AS r
+            JOIN header_situations AS sit 
+                ON sit.id = r.header_situation_id
+            JOIN header_specifications AS spec 
+                ON spec.id = r.header_specification_id
+            JOIN categories AS c 
+                ON c.id = r.category_id
+            JOIN tags AS t
+                ON t.id = r.header_tag_id
+            JOIN subcategories AS sub 
+                ON sub.id = r.subcategory_id
+            WHERE r.category_id = $1
+            AND r.subcategory_id = $2
+            AND r.inDirectory = true`, [categoryId, subcategoryId])
+
+        const headers = results.rows
+        return headers
+    }
+
+
+    // static async get(id) {
+    //     const results = await db.query(
+    //         `SELECT subcategory
+    //         FROM subcategories
+    //         WHERE id = $1`, [id])
+
+    //     const subcategory = results.row[0]
+    //     return subcategory
+    // }
+
+    // static async update(id, subcategory) {
+    //     const results = await db.query(
+    //         `UPDATE subcategories
+    //         SET subcategory = $2
+    //         WHERE id = $1
+    //         RETURNING subcategory`, [subcategory])
+
+    //     const subcategory = results.rows[0]
+    //     return subcategory
+    // }
 
     static async remove(id) {
         const results = await db.query(

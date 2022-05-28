@@ -1,145 +1,251 @@
-import React from 'react'
+import React, {useState, useContext, useEffect} from 'react'
+import { useParams } from 'react-router-dom'
 import {useHistory} from 'react-router-dom'
+import UserContext from '../context/UserConext'
+import CultureBumpApi from '../api/api'
+import Loading from '../components/Loading'
+import "react-widgets/styles.css"
+import Combobox from "react-widgets/Combobox"
 
-const DirectoryAdd = ({formData, handleChange, resetFormData}) => {
+
+const DirectoryAdd = () => {
   const history = useHistory()
-  let titleComponents;
+  const {id} = useParams()
+
+  const {currentUser}  = useContext(UserContext)
+  const username = currentUser.username
+  const [isHidden, setIsHidden] = useState(false)
+  const [titleComponents, setTitleComponents] = useState(null)
+  const [referencePoint, setReferencePoint] = useState({})
+
+  const [headerInfo, setHeaderValues] = useState({
+    headerSituation: [],
+    headerSpecification: [],
+    categories: [],
+    subcategories: [],
+    userTags: []
+  })
+
+  const [formData, setFormData] = useState({
+    headerSituationAdverb: '',
+    headerSituation: {},
+    headerSpecification: {},
+    category: {},
+    subcategory: {},
+    tag: {}
+  })
 
 
-  
+  useEffect(function loadPageInfo() {
+    async function getPageInfo() {
 
-
-
-
-  // State
-  const INITIAL_STATE = {
-    catId: {
-      catTitle: '',
-      isToggleOn: false,
-    },
-    catId: {
-      catTitle: '',
-      isToggleOn: false,
-      subcats: {
-        subcatId: {
-          subcatTitle: '',
-          isToggleOn: false,
-          universals: [
-            {universalId: 0,
-            universal: ''}
-          ]}
-      }
+      const referencePoint = await CultureBumpApi.getBasicReferencePointInfoById(id)
+      const headerValues = await CultureBumpApi.getHeaderValues(username)
+      setReferencePoint(referencePoint)
+      setHeaderValues(headerValues)
     }
-  }
-
-    // updating
-
-  // exampleDirectory[11].subcats = {
-  //   1: {
-  //     subcatTitle: 'classroom',
-  //       universals: [
-  //         'When I arrive late', 
-  //       ]
-  //     }
-  // }
+    getPageInfo()
+  }, [])
 
 
-  const handleSumbit = event => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    resetFormData()
+    let formatedHeaderSituation;
+
+    if (formData.headerSituationAdverb) {
+      formatedHeaderSituation = `${formData.headerSituationAdverb} ${formData.headerSituation}`
+    } else {
+      formatedHeaderSituation = formData.headerSituation
+    }
+
+    const data = {
+      header_situation_id: formatedHeaderSituation,
+      header_specification_id: formData.headerSpecification, 
+      header_tag_id: formData.tag, 
+      category_id: formData.category,
+      subcategory_id: formData.subcategory 
+    } 
+
+    await CultureBumpApi.addToDirectory(id, data)
     history.push(`/directory`)
-  } 
-
-  const {
-    headerSituation,
-    headerSpecification,
-    tag,
-    category,
-    subcategory
-  } = formData
-
-  // const provideTitle = () => {
-  //   isTitleProvided = true
-  // }
+  }
 
   const formatTitle = (event) => {
+    event.preventDefault()
     // Check to see if all three have values, tell them to complete all 3 if not done
-    const headerSituation = event.target.headerSituation.value
-    const headerSpecification = event.target.headerSpecification.value
-    const tag = event.target.tag.value
+    let headerSituation;
+    let headerSpecification;
+    let tag;
+    
+    if (typeof formData.headerSituation === 'string') {
+      headerSituation = `${formData.headerSituationAdverb} ${formData.headerSituation}`
+    } else { 
+      headerSituation = formData.headerSituation.header_situation
+    }
+
+    if (typeof formData.headerSpecification === 'string') {
+      headerSpecification = formData.headerSpecification
+    } else { 
+      headerSpecification = formData.headerSpecification.header_specification
+    }
+
+    if (typeof formData.tag === 'string') {
+      tag = formData.tag
+    } else { 
+      tag = formData.tag.tag
+    }
 
     if (headerSituation && headerSpecification && tag) {
-      titleComponents = (
+      let title = (
         <div>
           <p>
-            Does the Title below sound right? 
-            Edit the grammar your answers above if needed
+            Does the title below sound right? 
+            To change your title, edit your above answers and hit the formate title button again.
           </p>
-          <p>{headerSituation} {headerSpecification} {tag}</p>
+          <p>{headerSituation} {headerSpecification} in {tag}</p>
         </div>
       )
-      
-      return titleComponents
+      setTitleComponents(title)
     }
   }
 
+  function checkIfEmpty(value) {  
+    typeof value === 'string' ? setIsHidden(false) : setIsHidden(true)
+  }
+
+  function hideInput(event) {
+    isHidden ? setIsHidden(false) : setIsHidden(true)
+    setFormData(formData => ({
+      ...formData,
+      headerSituationAdverb: ''
+    }))
+  }
+
+  if (!referencePoint) return <Loading/>
+
+  const {
+    universal,
+    action,
+    qualities
+  } = referencePoint
+  
   return (
     <div>
       <h1>Add To Directory</h1>
+      <p>{universal && universal}</p>
+      <p>{action && action}</p>
+      <p>{qualities && qualities}</p>
       <p>Instructions</p>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <h2>Format The Title</h2>
         <p>What is the situation?</p>
-        <label>When </label>
-        <input 
-          id='headerSituation'
-          name='headerSituation'
+        
+        {!isHidden ? 
+          <select 
+            name="headerSituationAdverb" 
+            id="headerSituationAdverb" 
+            placeholder='When'
+            onChange={(event) => {
+              const {name, value} = event.target
+
+              setFormData(formData => ({
+                  ...formData,
+                  [name]: value
+              }))}}
+          >
+            <option value='' disabled selected>Choose option</option>
+            <option value="When">When</option>
+            <option value="How">How</option>
+            <option value="What">What</option>
+            <option value="Where">Where</option>
+          </select> : null
+        }
+
+        <Combobox 
+          data={headerInfo.headerSituation}
+          dataKey='id'
+          textField='header_situation'
           placeholder='I arrive late'
-          type='text'
-          value={headerSituation}
-          onChange={handleChange}/>
+          filter='contains'
+          hideEmptyPopup 
+          autoSelectMatches
+          onChange={(param) => {
+            checkIfEmpty(param)
+            setFormData(formData => ({
+                ...formData,
+                headerSituation: param
+            }))
+          }}
+          onSelect={(param) => hideInput(param)}
+        />
+
         <p>
           Do you do this in a specific location, with specific people, 
           or in a specific situation? (Such as at work, to people in authority, 
           during a holiday)
         </p>
-        <input 
-          id='headerSpecification'
-          name='headerSpecification'
+        <Combobox 
+          data={headerInfo.headerSpecification}
+          dataKey='id'
+          textField='header_specification'
           placeholder='to class'
-          type='text'
-          value={headerSpecification}
-          onChange={handleChange}/>
-        <input />
+          hideEmptyPopup
+          autoSelectMatches
+          filter='contains' 
+          onChange={(param) => {
+            setFormData(formData => ({
+                ...formData,
+                headerSpecification: param
+            }))
+          }}
+        />
+
         <p>
           Is this an action typically shared by one of your reference group?
           If so, which one?
         </p>
         <label>in </label>
-        <input 
-          id='tag'
-          name='tag'
-          placeholder='in Japan'
-          type='text'
-          value={tag}
-          onChange={handleChange}/>
-        <input />
+        <Combobox 
+          data={headerInfo.userTags}
+          dataKey='id'
+          textField='tag'
+          placeholder='Japan'
+          filter='contains'
+          hideEmptyPopup 
+          autoSelectMatches
+          onChange={(param) => {
+            setFormData(formData => ({
+                ...formData,
+                tag: param
+            }))
+          }}
+        />
+
         <button onClick={formatTitle}>Format Title</button>
         {titleComponents ? titleComponents : <p>please fill out all of the above questions</p>}
-        <p>{headerSituation} {headerSpecification} {tag}</p>
+
         <h2>Pick The Categories</h2>
         <label>
           Pick a good category for your  new reference point 
           so others can find it
         </label>
-        <input 
-          id='category'
-          name='category'
-          placeholder='category'
-          type='text'
-          value={category}
-          onChange={handleChange}/>
+        <Combobox 
+          data={headerInfo.categories}
+          dataKey='id'
+          textField='category'
+          placeholder='In School'
+          hideEmptyPopup
+          autoSelectMatches
+          filter='contains' 
+          onChange={(param) => {
+            setFormData(formData => ({
+                ...formData,
+                category: param
+            }))
+          }}
+        />
+
         <label>
           Does it fit in a good subcategory? 
           <span>Example:
@@ -147,18 +253,25 @@ const DirectoryAdd = ({formData, handleChange, resetFormData}) => {
             Subcategory: interactions with a teacher or classroom etiquette
           </span>
         </label>
-        <input 
-          id='subcategory'
-          name='subcategory'
-          placeholder='subcategory'
-          type='text'
-          value={subcategory}
-          onChange={handleChange}/>
-        <button onSubmit={handleSumbit}>Submit</button>
-      </form>
-      
-    </div>
+        <Combobox 
+          data={headerInfo.subcategories}
+          dataKey='id'
+          textField='subcategory'
+          placeholder='classroom etiquette'
+          hideEmptyPopup
+          autoSelectMatches
+          filter='contains' 
+          onChange={(param) => {
+            setFormData(formData => ({
+                ...formData,
+                subcategory: param
+            }))
+          }}
+        />
 
+        <button type='submit' >Submit</button>
+      </form>
+    </div>
   )
 }
 

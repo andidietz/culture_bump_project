@@ -1,23 +1,44 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import UserContext from '../context/UserConext'
 
 const Signup = ({signup}) => {
   const history = useHistory()
-  const {formData, handleChange, resetFormData} = useContext(UserContext)
+  const {currentUser} = useContext(UserContext)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    username: '', 
+    password: ''
+  })
   const {name, username, password, email} = formData
 
-  async function handleSumbit(event) {
+  useEffect(function waitForCurrentUser() {
+    if (currentUser) {
+      history.push(`/users/${currentUser.username}`)
+    }
+  }, [currentUser])
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    resetFormData()
+
     await signup(formData)
     history.push(`/users/${formData.username}`)
+  }
+
+  const handleChange = event => {
+    const {name, value} = event.target
+
+    setFormData(formData => ({
+        ...formData,
+        [name]: value
+    }))
   }
 
   return (
     <div>
       <h1>Sign up</h1>
-      <form onSubmit={handleSumbit}>
+      <form onSubmit={handleSubmit}>
         <input 
           id='name'
           name='name'

@@ -3,7 +3,6 @@ import {Link, NavLink} from 'react-router-dom'
 import UserContext from '../context/UserConext'
 
 const Nav = ({logout}) => {
-  console.debug("Navigation", "currentUser=", currentUser);
 
   const {currentUser} = useContext(UserContext)
   const loggedInNav = () => {

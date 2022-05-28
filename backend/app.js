@@ -4,14 +4,14 @@ const ExpressError = require('./expressError')
 const {authenticateJWT} = require('./middleware/auth')
 
 const referencPointsRoutes = require('./routes/referencePoints')
+const directoryRoutes = require('./routes/directory')
 const userRoutes = require('./routes/user')
 
 const app = express()
 app.use(cors())
 app.use(express.json())
 
-
-app.use('/directory', referencPointsRoutes)
+app.use('/directory', directoryRoutes)
 app.use('/steps', referencPointsRoutes)
 app.use('/users', userRoutes)
 app.use(authenticateJWT)

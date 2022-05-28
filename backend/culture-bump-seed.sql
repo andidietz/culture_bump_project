@@ -10,26 +10,27 @@ INSERT INTO users (
     email
 ) VALUES 
     ('AlgerianStudents', 'Algerian Students',
-        '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
+        '$2b$12$snv.uDpJE.P846unImxP7uUBoUwScu6sLYE3eCPoIv1gexmRMjrIS',
         'Algerian-test@gmail.com'),
     ('SaudiArabianStudents', 'Saudi Arabian Students',
-        '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
+        '$2b$12$snv.uDpJE.P846unImxP7uUBoUwScu6sLYE3eCPoIv1gexmRMjrIS',
         'SaudiArabian-test@gmail.com'), 
     ('ItalianStudents', 'Italian Students',
-        '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
+        '$2b$12$snv.uDpJE.P846unImxP7uUBoUwScu6sLYE3eCPoIv1gexmRMjrIS',
         'Italian-test@gmail.com'),  
     ('MexicanStudents', 'Mexican Students',
-        '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
+        '$2b$12$snv.uDpJE.P846unImxP7uUBoUwScu6sLYE3eCPoIv1gexmRMjrIS',
         'Mexican-test@gmail.com'),
     ('BrazilianStudents', 'Brazilian Students',
-        '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
+        '$2b$12$snv.uDpJE.P846unImxP7uUBoUwScu6sLYE3eCPoIv1gexmRMjrIS',
         'Brazilian-test@gmail.com'),   
     ('AmericanStudents', 'American Students',
-        '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
+        '$2b$12$snv.uDpJE.P846unImxP7uUBoUwScu6sLYE3eCPoIv1gexmRMjrIS',
         'American-test@gmail.com');
 
 INSERT INTO categories (category)
-VALUES ('in school');
+VALUES ('in school'),
+        ('in Grocery Store');
 
 INSERT INTO subcategories (
     subcategory
@@ -48,6 +49,12 @@ INSERT INTO tags (
     ('Mexico'),
     ('Brazil'),
     ('United States');
+
+INSERT INTO users_tags (
+    user_id, tag_id
+) VALUES 
+    ('AlgerianStudents', 1),
+    ('AlgerianStudents', 6);
 
 INSERT INTO  header_situations (
     header_situation
@@ -83,67 +90,69 @@ INSERT INTO reference_points (
     action,
     qualities,
     connection_point,
+    inDirectory,
     user_id,
     header_situation_id,
     header_specification_id,
+    header_tag_id,
     category_id,
     subcategory_id
 )
 VALUES 
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Arriving late to class', 
         'I step inside, greet the teacher as I walk to a seat', 
-        'Sample Qualities', 'Sample', 'AlgerianStudents', 1, 1, 1, 4),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'respectful', 'Sample', true, 'AlgerianStudents', 1, 1, 1, 1, 4),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Arriving late to class', 
         'I knock on the door, step inside, greet the teacher and say “I’m sorry” as I walks to a seat',
-        'Sample Qualities', 'Sample', 'SaudiArabianStudents', 1, 1, 1, 4),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'respectful', 'Sample', true, 'SaudiArabianStudents', 1, 1, 2, 1, 4),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Arriving late to class', 
         'I knock on the door, step inside and say, “Sorry” and wait for the teacher to give me permission to sit down.', 
-        'Sample Qualities', 'Sample', 'ItalianStudents', 1, 1, 1, 4),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'respectful', 'Sample', true, 'ItalianStudents', 1, 1, 3, 1, 4),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Arriving late to class', 
         'I slip in quietly and sit at the first available seat. At that time, I must explain why I am late only if the teacher asks', 
-        'Sample Qualities', 'Sample', 'MexicanStudents', 1, 1, 1, 4),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'respectful', 'Sample', true, 'MexicanStudents', 1, 1, 4, 1, 4),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Arriving late to class', 
         'I slip in quietly and sit at the first available seat. At that time, I must explain why I am late only if the teacher asks', 
-        'Sample Qualities', 'Sample', 'BrazilianStudents', 1, 1, 1, 4),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'respectful', 'Sample', true, 'BrazilianStudents', 1, 1, 5, 1, 4),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Arriving late to class', 
         'I slip in quietly and sit at the first available seat. I may apologize to the teacher after class', 
-        'Sample Qualities', 'Sample', 'AmericanStudents', 1, 1, 1, 4),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'respectful', 'Sample', true, 'AmericanStudents', 1, 1, 6, 1, 4),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Have a question during a lecture', 
         'I just talk if I have something to say until the professor insists on some order.', 
-        'Sample Qualities', 'Sample', 'AlgerianStudents', 2, 3, 1, 4),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'Attentive', 'Sample', false, 'AlgerianStudents', 2, 3, 1, 1, 4),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Have a question during a lecture', 
         'I raise  my hand and ask the teacher my question.', 
-        'Sample Qualities', 'Sample', 'SaudiArabianStudents', 2, 3, 1, 4),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'Attentive', 'Sample', false, 'SaudiArabianStudents', 2, 3, 2, 1, 4),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Have a question during a lecture', 
         'I raise  my hand and ask the teacher my question.', 
-        'Sample Qualities', 'Sample', 'ItalianStudents', 2, 3, 1, 4),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'Attentive', 'Sample', false, 'ItalianStudents', 2, 3, 3, 1, 4),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Have a question during a lecture', 
         'I may ask the teacher during the class or I may ask a classmate after class.', 
-        'Sample Qualities', 'Sample', 'MexicanStudents', 2, 3, 1, 4),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'Attentive', 'Sample', false, 'MexicanStudents', 2, 3, 4, 1, 4),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Have a question during a lecture', 
         'I may ask the teacher during the class or I may ask a classmate after class.', 
-        'Sample Qualities', 'Sample', 'BrazilianStudents', 2, 3, 1, 4),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'Attentive', 'Sample', false, 'BrazilianStudents', 2, 3, 5, 1, 4),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Have a question during a lecture', 
         'I raise  my hand and ask the teacher my question.', 
-        'Sample Qualities', 'Sample', 'AmericanStudents', 2, 3, 1, 4),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'Attentive', 'Sample', false, 'AmericanStudents', 2, 3, 6, 1, 4),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'How to show the teacher I am listening', 
         'I take notes, nod my head and look directly at teacher.', 
-        'Sample Qualities', 'Sample', 'AlgerianStudents', 9, 2, 1, 1), 
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'Attentive', 'Sample', true, 'AlgerianStudents', 9, 2, 1, 1, 1), 
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'How to show the teacher I am listening', 
         'I cross my arms across my chest and look directly at the teacher.', 
-        'Sample Qualities', 'Sample', 'SaudiArabianStudents', 9, 2, 1, 1),
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'Attentive', 'Sample', true, 'SaudiArabianStudents', 9, 2, 2, 1, 1),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'How to show the teacher I am listening', 
         'I take notes, nod my head and look directly at the teacher.', 
-        'Sample Qualities', 'Sample','ItalianStudents', 9, 2, 1, 1),  
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'Attentive', 'Sample', true,'ItalianStudents', 9, 2, 3, 1, 1),  
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'How to show the teacher I am listening', 
         'I ask questions or make comments. I may or may not take notes.', 
-        'Sample Qualities', 'Sample', 'MexicanStudents', 9, 2, 1, 1),  
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'Attentive', 'Sample', true, 'MexicanStudents', 9, 2, 4, 1, 1),  
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'How to show the teacher I am listening', 
         'I ask questions or make comments. I may or may not take notes.', 
-        'Sample Qualities', 'Sample', 'BrazilianStudents', 9, 2, 1, 1),  
-    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 
+        'Attentive', 'Sample', true, 'BrazilianStudents', 9, 2, 5, 1, 1),  
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'How to show the teacher I am listening', 
         'I take notes, nod my head and look directly at the teacher.', 
-        'Sample Qualities', 'Sample', 'AmericanStudents', 9, 2, 1, 1);  
+        'Attentive', 'Sample', true, 'AmericanStudents', 9, 2, 6, 1, 1);  
 
 INSERT INTO bookmarks (
     user_id, reference_point_id
@@ -151,7 +160,7 @@ INSERT INTO bookmarks (
     ('AlgerianStudents', 2),
     ('AlgerianStudents', 3),
     ('SaudiArabianStudents', 4),
-    ('SaudiArabianStudents', 5)
+    ('SaudiArabianStudents', 5);
 
 
 INSERT INTO tags_reference_points (
@@ -160,4 +169,7 @@ INSERT INTO tags_reference_points (
     (1, 1),
     (1, 7),
     (2, 2),
-    (2, 8)
+    (2, 8);
+
+
+    

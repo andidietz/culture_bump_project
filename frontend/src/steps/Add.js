@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useState} from 'react'
 import UserContext from '../context/UserConext'
 import {useHistory} from 'react-router-dom'
  import {
@@ -13,20 +13,62 @@ import {useHistory} from 'react-router-dom'
 import CultureBumpApi from '../api/api'
 
 const StepsAddForm = () => {
-  console.log('hitting StepsAddForm')
+  // console.log('hitting StepsAddForm')
   const history = useHistory()
-  const {currentUser, formData, handleChange, resetFormData} = useContext(UserContext)
+  const {currentUser} = useContext(UserContext)
+  const [formData, setFormData] = useState({
+    type: '', 
+    spark: '', 
+    thought: '',
+    observation: '',
+    response: '',
+    emotions: '',
+    universal: '',
+    action: '',
+    qualities: '',
+    connectionPoint: ''
+  })
 
-  const {username} = currentUser
+  // async function handleSubmit(event) {
+  //   event.preventDefault()
+  //   resetFormData()
+  //   formData.username = username
+  //   await CultureBumpApi.addBump(formData)
+  //   // console.log('StepForm - handleSubmit - formData', formData)
 
-  async function handleSubmit(event) {
+  //   history.push(`/users/${username}`)
+  // }
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    resetFormData()
-    formData.username = username
-    await CultureBumpApi.addBump(formData)
-    console.log('StepForm - handleSubmit - formData', formData)
 
-    history.push(`/users/${username}`)
+    const referencePointData = {
+      type: formData.type, 
+      spark: formData.spark, 
+      thought: formData.thought,
+      observation: formData.observation,
+      response: formData.response,
+      emotions: formData.emotions,
+      universal: formData.universal,
+      action: formData.action,
+      qualities: formData.qualities,
+      connectionPoint: formData.connectionPoint,
+      username: currentUser.username
+    } 
+
+    const updateUserInfo = await CultureBumpApi.addReferencePoint(referencePointData)
+
+    setFormData(formData => ({...formData}))
+    history.push(`/directory`)
+  }
+
+  const handleChange = event => {
+    const {name, value} = event.target
+
+    setFormData(formData => ({
+        ...formData,
+        [name]: value
+    }))
   }
 
   const {  
@@ -56,7 +98,7 @@ const StepsAddForm = () => {
         name='type'
         placeholder='ex: positive'
         type='text'
-        value={type}
+        value={formData.type}
         onChange={handleChange}
       />
       <label>culture bump with</label>
@@ -65,7 +107,7 @@ const StepsAddForm = () => {
         name='spark'
         placeholder='ex: person(s) or object(s)'
         type='text'
-        value={spark}
+        value={formData.spark}
         onChange={handleChange}
       />
       <label>and I thought that was</label>
@@ -74,7 +116,7 @@ const StepsAddForm = () => {
         name='thought'
         placeholder='ex: surprising, rude, cute, etc.'
         type='text'
-        value={thought}
+        value={formData.thought}
         onChange={handleChange}
       />
 

@@ -1,15 +1,13 @@
-import React, { useContext } from 'react'
-import RefContext from '../context/RefContext'
+import React from 'react'
 
-const ReferencePoint = () => {
-  const {
+const ReferencePoint = ({  
+    tag,  
+    action, 
     headerSituation, 
     headerSpecification, 
-    tag, 
-    action,
     qualities
-  } = useContext(RefContext)
-  
+  }) => {
+
   return (
     <div>
       <div>
@@ -20,7 +18,7 @@ const ReferencePoint = () => {
         <p>{headerSpecification}</p>
 
         <h2>General Shared Reference Group</h2>
-        <p>{tag}</p>
+        <p>in {tag}</p>
 
         <h2>I would ...</h2>
         <p>{action}</p>

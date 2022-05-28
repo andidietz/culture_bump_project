@@ -23,13 +23,13 @@ class CultureBumpApi {
     const requestData = {
       username, password
     }
-    console.log('Api login - data', requestData)
+    // console.log('Api login - data', requestData)
     const res = await this.request(`users/token`, requestData, 'post')
     return res.token
   }
 
   static async signup(data) {
-    console.log('hitting signup api', data)
+    // console.log('hitting signup api', data)
     const res = await this.request(`users/register`, data, 'post')
     return res.token
   }
@@ -39,24 +39,36 @@ class CultureBumpApi {
     return res.user
   }
 
-  // Bug here
   static async getCurrentUser(username) {
-    console.log('Api.js - getCurrentUser', username)
+    // console.log('Api.js - getCurrentUser', username)
     const res = await this.request(`users/${username}`)
     
     return res.user
+  } 
+
+  static async getUserReferencePoints(username) {
+    // console.log('getUserReferencePoints - ', username)
+
+    const res = await this.request(`users/${username}/referencePoints`)
+    // console.log('getUserReferencePoints - ', username, ', res', res)
+
+    return res.referencePoints
   }
 
-  static async getUserBumps(username) {
-    const res = await this.request(`users/${username}/reference-points`)
-    console.log('getUserBumps - ', username, ', res', res)
+  static async getTags() {
+    // console.log('getTags - ----------')
+    const res = await this.request(`directory/tags`)
+    // console.log('getUserTags -  res', res)
 
-    return res.userBumps
+    return res.tags
   }
 
   static async getUserTags(username) {
+    // console.log('getUserTags - ', username)
     const res = await this.request(`users/${username}/tags`)
-    return res.userBumps
+    // console.log('getUserTags - ', username, ', res', res)
+
+    return res.tags
   }
 
   static async getUserBookmarks(username) {
@@ -64,11 +76,20 @@ class CultureBumpApi {
     return res.bookmarks
   }
 
-  static async addBump(data) {
-    console.log('Api - addBump(data) - data', data)
+  static async addTag(username, data) {
+    // console.log('Api - addtag(data) - data', username, '-', data)
+
+    const res = await this.request(`users/${username}/tags`, data, 'post')
+    // console.log('Api -addTag res', res)
+
+    return res.tag
+  }
+
+  static async addReferencePoint(data) {
+    // console.log('Api - addBump(data) - data', data)
 
     const res = await this.request('directory', data, 'post')
-    console.log('Api -addBump res', res)
+    // console.log('Api -addBump res', res)
 
     return res.bump
   }
@@ -78,9 +99,21 @@ class CultureBumpApi {
     return res.refPoint
   }
 
-  static async getRefPoint(id) {
+  static async getSpecificReferencePointInfoById(id) {
+    // console.log('API - getReferencePointById - id', id)
     const res = await this.request(`directory/${id}`)
-    return res.refPoint
+    // console.log('API - getReferencePointById - res', res)
+
+    return res.referencePoint
+  }
+
+  static async getBasicReferencePointInfoById(id) {
+    // console.log('API - getBasicReferencePointInfoById - id', id)
+
+    const res = await this.request(`steps/${id}`)
+    // console.log('API - getBasicReferencePointInfoById - res', res)
+
+    return res.referencePoint
   }
 
   static async getAllRefPoints() {
@@ -91,6 +124,47 @@ class CultureBumpApi {
   static async deleteRefPoint(id) {
     const res = await this.request(`directory/${id}`)
     return res.refPoint
+  }
+
+  static async getCategories() {
+    // console.log('API - getCategories - hitting')
+    const res = await this.request('directory/categories')
+    // console.log('API - getCategories - res', res)
+
+    return res.categories
+  }
+
+  static async getSubcategories(id) {
+    // console.log('API - getSubcategories - hitting')
+    const res = await this.request(`directory/categories/${id}`)
+    // console.log('API - getSubcategories - res', res)
+
+    return res.subcategories
+  }
+
+  static async getHeaders(categoryId, subcategoryId) {
+    // console.log('API - getHeaders - hitting')
+    const res = await this.request(`directory/categories/${categoryId}/subcategories/${subcategoryId}`)
+    // console.log('API - getHeaders - res', res)
+
+    return res.headers
+  }
+
+  static async getHeaderValues(username) {
+    // console.log('API - getHeaderInfo - hitting')
+    const res = await this.request(`directory/header/${username}`)
+    // console.log('API - getHeaderInfo - res', res)
+
+    return res.headerValues
+  }
+
+
+  static async addToDirectory(id, data) {
+    // console.log('API - addToDirectory - id, data', id, data)
+    const res = await this.request(`directory/${id}`, data, 'patch')
+    // console.log('API - addToDirectory - res', res)
+
+    return res
   }
 }
 

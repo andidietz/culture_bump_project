@@ -1,18 +1,18 @@
 import React from 'react'
 import {Switch, Route, Redirect} from 'react-router-dom'
 import PrivateRoute from './PrivateRoute'
-import Login from '../auth/Login'
-import Signup from '../auth/Signup'
 
 import DirectoryAdd from '../directory/Add'
 import DirectoryList from '../directory/List'
 import DirectoryDetails from '../directory/Details'
+import StepsAdd from '../steps/Add'
 
 import ProfileUpdate from '../profiles/Update'
 import ProfileBookmarks from '../profiles/Bookmarks'
 import Profile from '../profiles/Profile'
+import Login from '../auth/Login'
+import Signup from '../auth/Signup'
 
-import StepsAdd from '../steps/Add'
 
 const Routes = ({login, signup}) => {
 
@@ -46,13 +46,13 @@ const Routes = ({login, signup}) => {
 				<Route exact path='/directory'>
 					<DirectoryList/>
 				</Route>
-
-				<Route exact path='/directory/:reference-point'>
-					<DirectoryDetails/>
+				
+				<Route exact path='/directory/add/:id'>
+					<DirectoryAdd/>
 				</Route>
 
-				<Route exact path='/directory/add'>
-					<DirectoryAdd/>
+				<Route exact path='/directory/:id'>
+					<DirectoryDetails/>
 				</Route>
 
 				<Route exact path='/steps/add'>

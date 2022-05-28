@@ -1,46 +1,40 @@
-import React, {useContext, useEffect} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import UserContext from '../context/UserConext'
 
 const Login = ({login}) => {
   const history = useHistory()
-  const {formData, handleChange, resetFormData, currentUser} = useContext(UserContext)
-  
-    useEffect(function loadUserProfileInfo() {
-      if (currentUser) {
-        history.push(`/users/${currentUser.username}`)
-      }
-    }, [currentUser])
+  const {currentUser} = useContext(UserContext)
+  const [formData, setFormData] = useState({
+    username: '', 
+    password: ''
+  })
+  const {username, password} = formData
+
+  useEffect(function waitForCurrentUser() {
+    if (currentUser) {
+      history.push(`/users/${currentUser.username}`)
+    }
+  }, [currentUser])
 
 
-  async function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    const result = await login(formData)
 
-    console.log('Login.js - handleSubmit - formData.username', formData.username)
-    
-    resetFormData()
+    const result = await login(formData)
+    setFormData(formData => ({...formData, password: ''}))
+
+    history.push(`/users/${username}`)
   }
 
+  const handleChange = event => {
+    const {name, value} = event.target
 
-
-  // function GoToPage() {
-  //   history.push(`/users/${formData.username}`)
-  // }
-  
-  // useEffect(function loadUserProfileInfo() {
-  //   async function getUserInfo() {
-  //     try {
-  //       history.push(`/users/${formData.username}`)
-  //     } catch (error) {
-
-  //     }
-  //   }
-  //   getUserInfo()
-  // }, [submitted])
-
-
-  const {username, password} = formData
+    setFormData(formData => ({
+        ...formData,
+        [name]: value
+    }))
+  }
 
   return (
     <div>

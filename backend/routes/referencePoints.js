@@ -4,8 +4,8 @@ const jsonschema = require('jsonschema')
 const express = require('express')
 const ExpressError = require('../expressError')
 const router = express.Router()
-const {ensureLoggedIn} = require('../middleware/auth')
 
+const Category = require('../models/category')
 const ReferencePoint = require('../models/referencePoint')
 const directoryAddSchema = require('../schemas/directoryAdd.json')
 const stepsAddSchema = require('../schemas/stepsAdd.json')
@@ -28,7 +28,7 @@ router.post('/',  async function(req, res, next) {
     }
 })
 
-router.get('/', ensureLoggedIn, async function(req, res, next) {
+router.get('/', async function(req, res, next) {
     try {
         const referencePoint = await ReferencePoint.getAll(req.query)
         return res.json({referencePoint})
@@ -37,17 +37,29 @@ router.get('/', ensureLoggedIn, async function(req, res, next) {
     }
 })
 
-router.get('/:id', ensureLoggedIn, async function(req, res, next) {
+router.get('/:id', async function(req, res, next) {
     try {
         // console.log('reference-point routes - /:id - req.params.id', req.params.id)
-        const referencePoint = await ReferencePoint.get(req.params.id)
+        const referencePoint = await ReferencePoint.getBasicReferencePointInfoById(req.params.id)
         return res.json({referencePoint})
     } catch(err) {
         return next(err)
     }
 })
 
-router.delete('/:id', ensureLoggedIn, async function(req, res, next) {
+router.get('/categories', async function(req, res, next) {
+    // console.log('directory routes - categories - hitting', res)
+
+    try {
+        const categories = await Category.getAll()
+        // console.log('directory routes - categories - categories', categories)
+        return res.json({categories})
+    } catch (err) {
+        return next(err)
+    }
+})
+
+router.delete('/:id', async function(req, res, next) {
     try {
         await ReferencePoint.remove(req.params.id)
         return res.json({deleted: req.params.id})
