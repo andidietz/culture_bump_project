@@ -30,7 +30,6 @@ const DirectoryDetails = () => {
   
   return (
     <div>
-      {referencePoint && referencePoint ? <p>yes</p> : <p>no</p>}
       <ReferencePoint 
         universal={universal}
         action={action}

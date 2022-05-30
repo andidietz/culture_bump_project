@@ -1,10 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import UserContext from '../context/UserConext'
+import {Button, Form, Card, Container, Row} from 'react-bootstrap'
 
 const Signup = ({signup}) => {
   const history = useHistory()
   const {currentUser} = useContext(UserContext)
+  const [formErrors, setFormErrors] = useState({})
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,17 +16,62 @@ const Signup = ({signup}) => {
   })
   const {name, username, password, email} = formData
 
-  useEffect(function waitForCurrentUser() {
-    if (currentUser) {
-      history.push(`/users/${currentUser.username}`)
+  useEffect(() => {
+    async function submitToServer() {
+      if(Object.keys(formErrors).length === 0 && isSubmitted) {
+        const result = await signup(formData)
+
+        if (result.sucess) {
+          setFormData(formData => ({...formData, password: ''}))
+          history.push(`/users/${formData.username}`)
+        } else {
+          setFormErrors(formErrors => ({
+            ...formErrors,
+            result: true
+        }))
+        }
+      }
     }
-  }, [currentUser])
+    submitToServer()
+  }, [formErrors]) 
+
+  const validate = (values) => {
+    const errors = {}
+    const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    
+    if (!values.name) {
+      errors.name = "Required"
+    } else if (values.name.length <= 2) {
+      errors.name = "Name value must be more than 2 characters"
+    }
+
+    if (!values.username) {
+      errors.username = "Required"
+    } else if (values.username.length <= 2) {
+      errors.username = "Username value must be more than 2 characters"
+    }
+
+    if (!values.email) {
+      errors.email = "Required"
+    } else if (!regex.test(values.email)) {
+      errors.email = "Not a vaild email"
+    }
+
+    if (!values.password) {
+      errors.password = "Required"
+    } else if (values.password.length < 5) {
+      errors.password = "Password must be more than 5 characters"
+    } else if (values.password.length >= 20) {
+      errors.password = "Password must be less than 20 characters"
+    }
+    
+      return errors
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-
-    await signup(formData)
-    history.push(`/users/${formData.username}`)
+    setFormErrors(validate(formData))
+    setIsSubmitted(true)
   }
 
   const handleChange = event => {
@@ -37,38 +85,71 @@ const Signup = ({signup}) => {
 
   return (
     <div>
-      <h1>Sign up</h1>
-      <form onSubmit={handleSubmit}>
-        <input 
-          id='name'
-          name='name'
-          placeholder='name'
-          type='text'
-          value={name}
-          onChange={handleChange}/>
-        <input 
-          id='username'
-          name='username'
-          placeholder='username'
-          type='text'
-          value={username}
-          onChange={handleChange}/>
-        <input 
-          id='email'
-          name='email'
-          placeholder='email'
-          type='text'
-          value={email}
-          onChange={handleChange}/>
-        <input 
-          id='password'
-          name='password'
-          placeholder='password'
-          type='text'
-          value={password}
-          onChange={handleChange}/>
-        <button>submit</button>
-      </form>
+      <Container >
+        <Row className="justify-content-center">
+        <Card className='border d-flex align-items-center justify-content-center' style={{ width: '18rem' }}>
+        <Card.Body>
+          <Card.Title>Sign up</Card.Title>
+          <Form onSubmit={handleSubmit}>
+          {formErrors.result ? <Form.Text>Invalid Username or Password</Form.Text> : null}
+            <Form.Group className="mb-3">
+              <Form.Label>Name</Form.Label>
+              <Form.Control 
+                id='name'
+                name='name'
+                placeholder='name'
+                type='text'
+                value={name}
+                onChange={handleChange}/>
+              <Form.Text>{formErrors.name}</Form.Text>   
+
+            </Form.Group>
+
+            <Form.Group className="mb-3">   
+            <Form.Label>Username</Form.Label>            
+              <Form.Control 
+                id='username'
+                name='username'
+                placeholder='username'
+                type='text'
+                value={username}
+                onChange={handleChange}/>
+              <Form.Text>{formErrors.username}</Form.Text>   
+
+            </Form.Group>
+
+            
+            <Form.Group className="mb-3">   
+            <Form.Label>Email</Form.Label>            
+              <Form.Control 
+                id='email'
+                name='email'
+                placeholder='email'
+                type='text'
+                value={email}
+                onChange={handleChange}/>
+              <Form.Text>{formErrors.email}</Form.Text>   
+
+            </Form.Group>
+
+            <Form.Group className="mb-3">   
+            <Form.Label>Password</Form.Label>            
+              <Form.Control 
+                id='password'
+                name='password'
+                placeholder='password'
+                type='text'
+                value={password}
+                onChange={handleChange}/>
+              <Form.Text>{formErrors.password}</Form.Text>   
+
+            </Form.Group>
+            <Button variant="primary" type="submit">Login</Button>
+          </Form>
+          </Card.Body>
+        </Card>
+        </Row>
+      </Container>
     </div>
   )
 }

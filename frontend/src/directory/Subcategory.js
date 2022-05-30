@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import Universal from './Universal'
 import CultureBumpApi from '../api/api'
+import {Accordion} from 'react-bootstrap'
+
 
 const Subcategory = ({subcategory, categoryId, subcategoryId}) => {
   const [headers, setHeaders] = useState([])
@@ -14,15 +16,34 @@ const Subcategory = ({subcategory, categoryId, subcategoryId}) => {
 
   return (
     <div>
-      <p onClick={getHeaders}>{subcategory}</p>
-      {isDisplayed && headers && 
+      <Accordion flush>
+        <Accordion.Item eventKey="1">
+          <Accordion.Header onClick={getHeaders}>{subcategory}</Accordion.Header>
+          <Accordion.Body>
+          {headers && 
+              headers.map(({tag, headerspecification, headersituation, id}) => 
+            <Universal 
+              headerSpecification={headerspecification} 
+              tag={tag} 
+              headerSituation={headersituation} 
+              id={id}/>)
+          }
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
+
+
+
+
+      {/* <p onClick={getHeaders}>{subcategory}</p> */}
+      {/* {isDisplayed && headers && 
         headers.map(({tag, headerspecification, headersituation, id}) => 
           <Universal 
             headerSpecification={headerspecification} 
             tag={tag} 
             headerSituation={headersituation} 
             id={id}/>)
-      }
+      } */}
     </div>
   )
 }

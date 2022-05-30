@@ -13,7 +13,6 @@ class Bookmark {
     }
 
     static async get(username) {
-        console.log('username', username)
         const results = await db.query(
             `SELECT r.universal, 
                 r.action, 

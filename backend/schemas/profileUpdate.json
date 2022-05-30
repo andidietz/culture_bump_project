@@ -9,11 +9,7 @@
         {
             "name": "Ben",
             "password": "password",
-            "email": "Ben@gmail.com",
-            "tags": [
-                "American",
-                "50-60's"
-            ]
+            "email": "Ben@gmail.com"
         }
     ],
     "required": [],
@@ -47,36 +43,6 @@
             "examples": [
                 "Ben@gmail.com"
             ]
-        },
-        "tags": {
-            "$id": "#/properties/tags",
-            "type": "array",
-            "title": "The tags schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": [],
-            "examples": [
-                [
-                    "American",
-                    "50-60's"
-                ]
-            ],
-            "additionalItems": true,
-            "items": {
-                "$id": "#/properties/tags/items",
-                "anyOf": [
-                    {
-                        "$id": "#/properties/tags/items/anyOf/0",
-                        "type": "string",
-                        "title": "The first anyOf schema",
-                        "description": "An explanation about the purpose of this instance.",
-                        "default": "",
-                        "examples": [
-                            "American",
-                            "50-60's"
-                        ]
-                    }
-                ]
-            }
         }
     },
     "additionalProperties": true

@@ -4,7 +4,6 @@ import UserContext from '../context/UserConext'
 
 const PrivateRoute = ({exact, path, children}) => {
   const {currentUser} = useContext(UserContext)
-  // console.log('PrivateRoute', currentUser)
   if (!currentUser) {
     return <Redirect to='/users/login'/>
   }

@@ -6,6 +6,7 @@ import CultureBumpApi from '../api/api'
 import Loading from '../components/Loading'
 import "react-widgets/styles.css"
 import Combobox from "react-widgets/Combobox"
+import { Container, Form, Row, Col, Card, Button} from 'react-bootstrap'
 
 
 const DirectoryAdd = () => {
@@ -18,7 +19,7 @@ const DirectoryAdd = () => {
   const [titleComponents, setTitleComponents] = useState(null)
   const [referencePoint, setReferencePoint] = useState({})
 
-  const [headerInfo, setHeaderValues] = useState({
+  const [headerValues, setHeaderValues] = useState({
     headerSituation: [],
     headerSpecification: [],
     categories: [],
@@ -41,8 +42,15 @@ const DirectoryAdd = () => {
 
       const referencePoint = await CultureBumpApi.getBasicReferencePointInfoById(id)
       const headerValues = await CultureBumpApi.getHeaderValues(username)
+
       setReferencePoint(referencePoint)
       setHeaderValues(headerValues)
+
+      // TODO: Add Alert
+      if (headerValues.userTags && headerValues.userTags.length === 0) {
+        alert("Looks like you haven't added any Shared Reference Group Tags to your profile. Please edit your profile and add at least one tag in order to add your reference point to the directory")
+        history.push(`/users/${username}`)
+      }
     }
     getPageInfo()
   }, [])
@@ -72,7 +80,6 @@ const DirectoryAdd = () => {
 
   const formatTitle = (event) => {
     event.preventDefault()
-    // Check to see if all three have values, tell them to complete all 3 if not done
     let headerSituation;
     let headerSpecification;
     let tag;
@@ -131,146 +138,157 @@ const DirectoryAdd = () => {
   
   return (
     <div>
-      <h1>Add To Directory</h1>
-      <p>{universal && universal}</p>
-      <p>{action && action}</p>
-      <p>{qualities && qualities}</p>
-      <p>Instructions</p>
+      <Container>
+        <Row>
+          <Card>
+            <Card.Title>Add To Directory</Card.Title>
+            <Card.Body>{universal && universal}</Card.Body>
+            <Card.Body>{action && action}</Card.Body>
+            <Card.Body>{qualities && qualities}</Card.Body>
+          </Card>
+          <Form onSubmit={handleSubmit}>
+            <h2>Format The Title</h2>
+            <Form.Group>
 
-      <form onSubmit={handleSubmit}>
-        <h2>Format The Title</h2>
-        <p>What is the situation?</p>
-        
-        {!isHidden ? 
-          <select 
-            name="headerSituationAdverb" 
-            id="headerSituationAdverb" 
-            placeholder='When'
-            onChange={(event) => {
-              const {name, value} = event.target
+              <Form.Label>What is the situation?</Form.Label>
+              <Col>
+                {!isHidden ? 
+                  <select 
+                    name="headerSituationAdverb" 
+                    id="headerSituationAdverb" 
+                    placeholder='When'
+                    onChange={(event) => {
+                      const {name, value} = event.target
 
-              setFormData(formData => ({
-                  ...formData,
-                  [name]: value
-              }))}}
-          >
-            <option value='' disabled selected>Choose option</option>
-            <option value="When">When</option>
-            <option value="How">How</option>
-            <option value="What">What</option>
-            <option value="Where">Where</option>
-          </select> : null
-        }
+                      setFormData(formData => ({
+                          ...formData,
+                          [name]: value
+                      }))}}
+                  >
+                    <option value='' disabled selected>Choose option</option>
+                    <option value="When">When</option>
+                    <option value="How">How</option>
+                    <option value="What">What</option>
+                    <option value="Where">Where</option>
+                  </select> : null
+                }
+              </Col>
+              <Col>
+                <Combobox 
+                  data={headerValues.headerSituation}
+                  dataKey='id'
+                  textField='header_situation'
+                  placeholder='I arrive late'
+                  filter='contains'
+                  hideEmptyPopup 
+                  autoSelectMatches
+                  onChange={(param) => {
+                    checkIfEmpty(param)
+                    setFormData(formData => ({
+                        ...formData,
+                        headerSituation: param
+                    }))
+                  }}
+                  onSelect={(param) => hideInput(param)}
+                />
+              </Col>
+            </Form.Group>
 
-        <Combobox 
-          data={headerInfo.headerSituation}
-          dataKey='id'
-          textField='header_situation'
-          placeholder='I arrive late'
-          filter='contains'
-          hideEmptyPopup 
-          autoSelectMatches
-          onChange={(param) => {
-            checkIfEmpty(param)
-            setFormData(formData => ({
-                ...formData,
-                headerSituation: param
-            }))
-          }}
-          onSelect={(param) => hideInput(param)}
-        />
+            <Form.Group>
+              <Form.Label>
+                Do you do this in a specific location, with specific people, 
+                or in a specific situation? (Such as at work, to people in authority, 
+                during a holiday)
+              </Form.Label>
+              <Combobox 
+                data={headerValues.headerSpecification}
+                dataKey='id'
+                textField='header_specification'
+                placeholder='to class'
+                hideEmptyPopup
+                autoSelectMatches
+                filter='contains' 
+                onChange={(param) => {
+                  setFormData(formData => ({
+                      ...formData,
+                      headerSpecification: param
+                  }))
+                }}
+              />
+            </Form.Group>
 
-        <p>
-          Do you do this in a specific location, with specific people, 
-          or in a specific situation? (Such as at work, to people in authority, 
-          during a holiday)
-        </p>
-        <Combobox 
-          data={headerInfo.headerSpecification}
-          dataKey='id'
-          textField='header_specification'
-          placeholder='to class'
-          hideEmptyPopup
-          autoSelectMatches
-          filter='contains' 
-          onChange={(param) => {
-            setFormData(formData => ({
-                ...formData,
-                headerSpecification: param
-            }))
-          }}
-        />
+            <Form.Group>
+              <Form.Label>
+                Is this an action typically shared by one of your reference group?
+                 If so, which one?
+              </Form.Label>
+              <Form.Label>In</Form.Label>
+              <Combobox 
+                data={headerValues.userTags}
+                dataKey='id'
+                textField='tag'
+                placeholder='Japan'
+                filter='contains'
+                hideEmptyPopup 
+                autoSelectMatches
+                onChange={(param) => {
+                  setFormData(formData => ({
+                      ...formData,
+                      tag: param
+                  }))
+                }}
+              />
+            </Form.Group>
+            <Button onClick={formatTitle}>Format Title</Button>
+            {titleComponents ? titleComponents : <p>please fill out all of the above questions</p>}
+          
+            <h2>Pick The Categories</h2>
+            <Form.Group>
+              <Form.Label>
+                Pick a good category for your  new reference point 
+                so others can find it
+              </Form.Label>
+              <Combobox 
+                data={headerValues.categories}
+                dataKey='id'
+                textField='category'
+                placeholder='In School'
+                hideEmptyPopup
+                autoSelectMatches
+                filter='contains' 
+                onChange={(param) => {
+                  setFormData(formData => ({
+                      ...formData,
+                      category: param
+                  }))
+                }}
+              />
+            </Form.Group>
 
-        <p>
-          Is this an action typically shared by one of your reference group?
-          If so, which one?
-        </p>
-        <label>in </label>
-        <Combobox 
-          data={headerInfo.userTags}
-          dataKey='id'
-          textField='tag'
-          placeholder='Japan'
-          filter='contains'
-          hideEmptyPopup 
-          autoSelectMatches
-          onChange={(param) => {
-            setFormData(formData => ({
-                ...formData,
-                tag: param
-            }))
-          }}
-        />
-
-        <button onClick={formatTitle}>Format Title</button>
-        {titleComponents ? titleComponents : <p>please fill out all of the above questions</p>}
-
-        <h2>Pick The Categories</h2>
-        <label>
-          Pick a good category for your  new reference point 
-          so others can find it
-        </label>
-        <Combobox 
-          data={headerInfo.categories}
-          dataKey='id'
-          textField='category'
-          placeholder='In School'
-          hideEmptyPopup
-          autoSelectMatches
-          filter='contains' 
-          onChange={(param) => {
-            setFormData(formData => ({
-                ...formData,
-                category: param
-            }))
-          }}
-        />
-
-        <label>
-          Does it fit in a good subcategory? 
-          <span>Example:
-            Category: school
-            Subcategory: interactions with a teacher or classroom etiquette
-          </span>
-        </label>
-        <Combobox 
-          data={headerInfo.subcategories}
-          dataKey='id'
-          textField='subcategory'
-          placeholder='classroom etiquette'
-          hideEmptyPopup
-          autoSelectMatches
-          filter='contains' 
-          onChange={(param) => {
-            setFormData(formData => ({
-                ...formData,
-                subcategory: param
-            }))
-          }}
-        />
-
-        <button type='submit' >Submit</button>
-      </form>
+            <Form.Group>
+              <Form.Label>
+                Does it fit in a good subcategory? 
+              </Form.Label>
+              <Combobox 
+                data={headerValues.subcategories}
+                dataKey='id'
+                textField='subcategory'
+                placeholder='classroom etiquette'
+                hideEmptyPopup
+                autoSelectMatches
+                filter='contains' 
+                onChange={(param) => {
+                  setFormData(formData => ({
+                      ...formData,
+                      subcategory: param
+                  }))
+                }}
+              />
+            </Form.Group>
+            <Button type='submit'>Submit</Button>
+          </Form>
+        </Row>
+      </Container>
     </div>
   )
 }

@@ -13,13 +13,10 @@ class Category {
     }
 
     static async getAll() {
-        // console.log('Models - getALL- hitting')
         const results = await db.query(
             `SELECT id, category
             FROM categories`)
         
-        // console.log('Models - getALL - results', results.rows)
-
         const categories = results.rows
         return categories
     }

@@ -10,7 +10,8 @@ import useLocalStorage from './hooks/useLocalStorage'
 import useFields from './hooks/useFields'
 import Loading from './components/Loading'
 
-import './App.css'
+
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 export const TOKEN_IN_STORAGE = "Storage-Token"
 

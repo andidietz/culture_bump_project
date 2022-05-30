@@ -1,8 +1,8 @@
 import React from 'react'
 
-const step1Tips = () => {
+const Step1Tips = () => {
   return (
-    <div>
+    <>
       <h4>Finding a culture bump</h4>
         <p>
           Recall a time when something caught your attention, 
@@ -23,13 +23,13 @@ const step1Tips = () => {
           of your 8 Steps. 
         </p>
         <p>So don't talk about motivations or feelings in this step.</p>
-    </div>
+    </>
   )
 }
 
-const step2Tips = () => {
+const Step2Tips = () => {
   return (
-    <div>
+    <>
       <h4>Keep it simple</h4>
         <p>
           Don’t tell the story. Just focus on the actions and words you 
@@ -54,13 +54,13 @@ const step2Tips = () => {
           Don’t tell the story. Just focus on the actions and words saw, 
           heard, touched, or smelled.
         </p>
-    </div>
+    </>
   )
 }
 
-const step3Tips = () => {
+const Step3Tips = () => {
   return (
-    <div>
+    <>
       <h4>Use descriptive language only</h4>
         <p>
           Describe exactly what you  did—using only precise and literal 
@@ -80,13 +80,13 @@ const step3Tips = () => {
           Don’t tell the story or add how you felt or your thoughts about 
           the other person or yourself. Just focus on your actions and words.
         </p>
-    </div>
+    </>
   )
 }
 
-const step4Tips = () => {
+const Step4Tips = () => {
   return (
-    <div>
+    <>
       <h4>Try to identify as many emotions as possible.</h4>
         <p>
           Many times we are aware of being mad or angry but underneath we 
@@ -162,13 +162,13 @@ const step4Tips = () => {
             humiliation, regret, mortification
           </li>
         </ul>
-    </div>
+    </>
   )
 }
 
-const step5Tips = () => {
+const Step5Tips = () => {
   return (
-    <div>
+    <>
       <h4>Why do you think they did what they did?</h4>
         <p>
           When asking yourself "why" the other person did what they did, you 
@@ -225,13 +225,13 @@ const step5Tips = () => {
           Roles of the individuals involved, the ages, pertinent relationships, 
           gender, or whether the situation occurred in public or in private.
         </p>
-    </div>
+    </>
   )
 }
 
-const step6Tips = () => {
+const Step6Tips = () => {
   return (
-    <div>
+    <>
       <h4>Use descriptive language</h4>
         <p>
         Try to make the behavior as precise and vivid as possible—Add as 
@@ -263,13 +263,13 @@ const step6Tips = () => {
           position. Or you might think of what someone from your "group" 
           would do in that situation.
         </p>
-    </div>
+    </>
   )
 }
 
-const step7Tips = () => {
+const Step7Tips = () => {
   return (
-    <div>
+    <>
       <h4>Finding Qualities</h4>
         <p>
           Remember in Step 1, when you said "I thought that was...(rude, silly, nice, etc)." You were associating an action someone did with a quality. This is similar. You associate the actions above in step six with certain qualities. When your brain see someone doing those actions, it thinks (often subconsciously) "Oh they are being...(considerate, wise, etc)."
@@ -319,16 +319,16 @@ const step7Tips = () => {
             Obstructive
           </li>
       </ul>
-    </div>
+    </>
   )
 }
 
 export {
-  step1Tips,
-  step2Tips,
-  step3Tips,
-  step4Tips,
-  step5Tips,
-  step6Tips,
-  step7Tips
+  Step1Tips,
+  Step2Tips,
+  Step3Tips,
+  Step4Tips,
+  Step5Tips,
+  Step6Tips,
+  Step7Tips
 }
