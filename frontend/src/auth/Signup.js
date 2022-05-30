@@ -64,7 +64,7 @@ const Signup = ({signup}) => {
     } else if (values.password.length >= 20) {
       errors.password = "Password must be less than 20 characters"
     }
-    
+
       return errors
   }
 
@@ -91,7 +91,6 @@ const Signup = ({signup}) => {
         <Card.Body>
           <Card.Title>Sign up</Card.Title>
           <Form onSubmit={handleSubmit}>
-          {formErrors.result ? <Form.Text>Invalid Username or Password</Form.Text> : null}
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
               <Form.Control 
