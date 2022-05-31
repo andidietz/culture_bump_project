@@ -2,14 +2,14 @@ import React, {useContext, useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import UserContext from '../context/UserConext'
 import CultureBumpApi from '../api/api'
-import "react-widgets/styles.css"
 import Combobox from "react-widgets/Combobox"
 import { Card, Container, Form, Row, Badge, Button } from 'react-bootstrap'
+import './Update.css'
 
 const ProfileUpdate = () => {
   const history = useHistory()
 
-  const {currentUser, setCurrentUser, userTags, setUserTags}  = useContext(UserContext)
+  const {currentUser, userTags, setUserTags}  = useContext(UserContext)
   const [allTags, setAllTags] = useState([])
   const [formErrors, setFormErrors] = useState({})
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -20,6 +20,7 @@ const ProfileUpdate = () => {
     name: currentUser.name,
     username: currentUser.username, 
     password: '',
+    matchingPassword: '',
     tag: ''
   })
 
@@ -30,9 +31,9 @@ const ProfileUpdate = () => {
         setAllTags(allTags)
         
         const userTags = await CultureBumpApi.getUserTags(username)
-        userTags.map(tagInfo => {
+        userTags.map(tagInfo => (
           tagsToCompare.push(tagInfo.tag.toUpperCase())
-        })
+        ))
 
         setUserTags(userTags)
       } catch (error) {
@@ -47,9 +48,9 @@ const ProfileUpdate = () => {
     async function getUpdatedUserTags() {
       try {
         const userTags = await CultureBumpApi.getUserTags(username)
-        userTags.map(tagInfo => {
+        userTags.map(tagInfo => (
           tagsToCompare.push(tagInfo.tag.toUpperCase())
-        })
+        ))
 
         setUserTags(userTags)
       } catch (error) {
@@ -110,6 +111,8 @@ const ProfileUpdate = () => {
         errors.password = "Password must be more than 5 characters"
       } else if (values.password.length >= 20) {
         errors.password = "Password must be less than 20 characters"
+      } else if (values.password !== values.matchingPassword) {
+        errors.password = "Password does not match"
       }
     }
 
@@ -154,7 +157,6 @@ const ProfileUpdate = () => {
       const result = tagsToCompare.filter(isDuplicate)
   
       if (result.length !== 0) {
-        // TODO: Alert
         alert('Found Duplicate')
       } else {
         const tagData = {tag: formData.tag}
@@ -175,73 +177,89 @@ const ProfileUpdate = () => {
         <Row className="justify-content-center">
           <Card style={{ width: '25rem' }}>
             <Card.Title>Update Profile</Card.Title>
-            <Card.Subtitle>Username: {currentUser.username}</Card.Subtitle>
-            <Card.Subtitle>Shared Reference Groups:</Card.Subtitle>
-            {
-              userTags && userTags ? 
-              userTags.map(tag => <span><Badge size="sm" bg="primary">{tag.tag}</Badge></span>) : null
-            }
-            <Form onSubmit={addTag}>
-              <Form.Group className="mb-3">
-                <Form.Label>User Tag</Form.Label>
-                  <Combobox 
-                    data={allTags}
-                    dataKey='id'
-                    textField='tag'
-                    placeholder='Japan'
-                    filter='contains'
-                    hideEmptyPopup 
-                    autoSelectMatches
-                    onChange={(param) => {
-                      setFormData(formData => ({
-                        ...formData,
-                        tag: param
-                      }))
-                    }}
-                  />
-                <Form.Text>{formErrors.tag}</Form.Text>   
-                <Button type='submit'>Add Tag</Button>
-              </Form.Group>
-            </Form>
-            
-            <Form onSubmit={handleSubmit}>
-              <Form.Group>
-                <Form.Label>Name</Form.Label>
-                <Form.Control 
-                  id='name'
-                  name='name'
-                  placeholder='name'
-                  type='text'
-                  value={formData.name}
-                  onChange={handleChange}/>
-                <Form.Text>{formErrors.name}</Form.Text>
-              </Form.Group>
-              
-              <Form.Group>
-                <Form.Label>Email</Form.Label>
-                <Form.Control 
-                  id='email'
-                  name='email'
-                  placeholder='email'
-                  type='text'
-                  value={formData.email}
-                  onChange={handleChange}/>
-                <Form.Text>{formErrors.email}</Form.Text>
-              </Form.Group>
-              
-              <Form.Group>
-                <Form.Label>Password</Form.Label>
-                <Form.Control 
-                  id='password'
-                  name='password'
-                  placeholder='password'
-                  type='text'
-                  value={formData.password}
-                  onChange={handleChange}/>
-                <Form.Text>{formErrors.password}</Form.Text>
-              </Form.Group>
-              <Button type='submit'>Update User Info</Button>
-            </Form>
+            <Card.Body className='update-info'>Username: {currentUser.username}</Card.Body>
+            <Card.Subtitle className='update-section-header'>Shared Reference Groups:</Card.Subtitle>
+            <Row className='section-content'>
+              <Card.Body>Don't see the tag you're looking for on the list? Add a new!</Card.Body>
+              {
+                userTags && userTags ? 
+                userTags.map(tag => <span><Badge size="sm" bg="primary">{tag.tag}</Badge></span>) : null
+              }
+              <Form onSubmit={addTag}>
+                <Form.Group className="mb-3">
+                  <Form.Label className='label'>User Tag</Form.Label>
+                    <Combobox 
+                      data={allTags}
+                      dataKey='id'
+                      textField='tag'
+                      placeholder='Japan'
+                      filter='contains'
+                      hideEmptyPopup 
+                      autoSelectMatches
+                      onChange={(param) => {
+                        setFormData(formData => ({
+                          ...formData,
+                          tag: param
+                        }))
+                      }}
+                    />
+                  <Form.Text>{formErrors.tag}</Form.Text>   
+                  <Button className='update-button' type='submit'>Add Tag</Button>
+                </Form.Group>
+              </Form>
+            </Row>
+            <Row className='section-content'>
+              <Form onSubmit={handleSubmit}>
+                <Form.Group>
+                  <Card.Body>Fill in your update info below and hit the button to save</Card.Body>
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control 
+                    id='name'
+                    name='name'
+                    placeholder='name'
+                    type='text'
+                    value={formData.name}
+                    onChange={handleChange}/>
+                  <Form.Text>{formErrors.name}</Form.Text>
+                </Form.Group>
+                
+                <Form.Group>
+                  <Form.Label className='label'>Email</Form.Label>
+                  <Form.Control 
+                    id='email'
+                    name='email'
+                    placeholder='email'
+                    type='text'
+                    value={formData.email}
+                    onChange={handleChange}/>
+                  <Form.Text>{formErrors.email}</Form.Text>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label className='label'>Password</Form.Label>
+                  <Form.Control 
+                    id='password'
+                    name='password'
+                    placeholder='password'
+                    type='text'
+                    value={formData.password}
+                    onChange={handleChange}/>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label className='label'>Retype New Password</Form.Label>
+                  <Form.Control 
+                    id='matchingPassword'
+                    name='matchingPassword'
+                    placeholder='password'
+                    type='text'
+                    value={formData.matchingPassword}
+                    onChange={handleChange}/>
+                  <Form.Text>{formErrors.password}</Form.Text>
+                </Form.Group>
+                <Button className='update-button' type='submit'>Update User Info</Button>
+              </Form>
+            </Row>
           </Card>
         </Row>
       </Container>

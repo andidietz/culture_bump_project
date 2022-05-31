@@ -1,9 +1,19 @@
-.header {
+h1, p {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.directory-component {
+  margin: 2rem;
+  padding: 1rem
+}
+
+.header {
   font-size: calc(10px + 4vmin);
 }
 
-
+.instructions {
+  font-size: calc(10px + 1vmin);
+}

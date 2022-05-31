@@ -46,7 +46,6 @@ const DirectoryAdd = () => {
       setReferencePoint(referencePoint)
       setHeaderValues(headerValues)
 
-      // TODO: Add Alert
       if (headerValues.userTags && headerValues.userTags.length === 0) {
         alert("Looks like you haven't added any Shared Reference Group Tags to your profile. Please edit your profile and add at least one tag in order to add your reference point to the directory")
         history.push(`/users/${username}`)
@@ -239,8 +238,8 @@ const DirectoryAdd = () => {
                 }}
               />
             </Form.Group>
-            <Button onClick={formatTitle}>Format Title</Button>
             {titleComponents ? titleComponents : <p>please fill out all of the above questions</p>}
+            <Button onClick={formatTitle}>Format Title</Button>
           
             <h2>Pick The Categories</h2>
             <Form.Group>

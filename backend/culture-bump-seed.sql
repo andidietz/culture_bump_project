@@ -38,7 +38,8 @@ INSERT INTO subcategories (
     ('interacting with the teacher'),
     ('interacting with adminstration'),
     ('interacting with other students'),
-    ('classroom etiquette');
+    ('classroom etiquette'),
+    ('at the checkout');
 
 INSERT INTO tags (
     tag
@@ -68,7 +69,8 @@ INSERT INTO  header_situations (
     ('When I address the teacher'),
     ('When I want to use a computer or phone'),
     ('When I want to show the teacher I am paying attention'),
-    ('The type of students I expect to see');
+    ('The type of students I expect to see'),
+    ('When I figure out I do not have my wallet with me');
 
 
 INSERT INTO header_specifications (
@@ -77,7 +79,8 @@ INSERT INTO header_specifications (
     ('to class'),
     ('in class'),
     ('during a lecture'),
-    ('for a test');
+    ('for a test'),
+    ('at the checkout');
 
 INSERT INTO reference_points (
     type,
@@ -152,7 +155,12 @@ VALUES
         'Attentive', 'Sample', true, 'BrazilianStudents', 9, 2, 5, 1, 1),  
     ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'How to show the teacher I am listening', 
         'I take notes, nod my head and look directly at the teacher.', 
-        'Attentive', 'Sample', true, 'AmericanStudents', 9, 2, 6, 1, 1);  
+        'Attentive', 'Sample', true, 'AmericanStudents', 9, 2, 6, 1, 1),
+    ('Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Sample', 'Finding out I do not have my wallet at the check out', 
+        'If I left my wallet in my car, I would say to the cashier "Oh, no, I left my wallet in my car. Is it alright if 
+        leave my cart here and run out and get it." If they say yes, I would move the cart to the end of checkout lane out
+        off the way, and quickly go out to grab my wallet', 'Apologetic, Taking responiblities and action in an embarrassing 
+        situation, mindful of the inconvenience/situation I created', 'Sample', true, 'AmericanStudents', 11, 5, 6, 2, 5);  
 
 INSERT INTO bookmarks (
     user_id, reference_point_id

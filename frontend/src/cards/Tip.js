@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { Button } from 'react-bootstrap'
 
 const Tips = ({Tip}) => {
   const [isDisplayed, setIsDisplayed] = useState(false)
@@ -10,7 +11,7 @@ const Tips = ({Tip}) => {
 
   return (
     <div>
-      <button onClick={toggle}>Tips</button>
+      <Button variant="outline-secondary" onClick={toggle}>Tips</Button>
       {isDisplayed && isDisplayed ? Tip : null}
     </div>
   )

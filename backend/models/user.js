@@ -27,7 +27,7 @@ class User {
 
   static async register({username, email, name, password}) {
     const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR)
-    
+
     const results = await db.query(
       `INSERT INTO users
       (username, email, password, name)
@@ -40,14 +40,10 @@ class User {
     return user
   }
 
-  // TODO: Finish
   static async update(username, data) {
-    console.log('update', username, data)
-
     if (data.password) {
       data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR)
     }
-
 
     const { setCols, values } = sqlForPartialUpdate(data,
       {
@@ -56,12 +52,10 @@ class User {
       }         
     )
     const usernameVarIdx = "$" + (values.length + 1)
-    console.log('usernameVarIdx', usernameVarIdx)
     const querySql = `UPDATE users 
                       SET ${setCols} 
                       WHERE username = ${usernameVarIdx} 
                       RETURNING username`
-    console.log('setCols', setCols, 'values', values)
 
     const result = await db.query(querySql, [...values, username])
     const user = result.rows[0]

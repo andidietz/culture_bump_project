@@ -31,17 +31,6 @@ class HeaderSpecification {
         return headerSpecification
     }
 
-    // static async update(id, headerSpecification) {
-    //     const results = await db.query(
-    //         `UPDATE header_specifications
-    //         SET header_specification = $2
-    //         WHERE id = $1
-    //         RETURNING header_specification`, [id, headerSpecification])
-
-    //     const headerSpecification = results.rows[0]
-    //     return headerSpecification
-    // }
-
     static async remove(id) {
         const results = await db.query(
             `DELETE

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import Category from './Category.js'
 import CultureBumpApi from '../api/api.js'
 import Loading from '../components/Loading'
-import {Container, Card, Row} from 'react-bootstrap'
+import {Container, Row} from 'react-bootstrap'
 import './List.css'
 
 
@@ -21,10 +21,11 @@ const DirectoryList = () => {
 
   return (
     <div>
-      <Container fluid>
+      <Container fluid className="directory-component">
         <Row className="justify-content-center">
 
           <h1 className='header'>Culture Bump Directory</h1>
+          <p className='instruction'>Click on the categories to navigate through the directory.</p>
           {categories && categories.map(
             ({category, id}) => <Category category={category} id={id}/>)
           }

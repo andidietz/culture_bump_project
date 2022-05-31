@@ -5,9 +5,8 @@ import jwt from 'jsonwebtoken'
 import Routes from './nav/Routes'
 import CultureBumpApi from './api/api'
 import UserContext from './context/UserConext'
-import Nav from './nav/Nav'
+import Navigation from './nav/Nav'
 import useLocalStorage from './hooks/useLocalStorage'
-import useFields from './hooks/useFields'
 import Loading from './components/Loading'
 
 
@@ -20,14 +19,6 @@ function App() {
   const [currentUser, setCurrentUser] = useState('')
   const [token, setToken] = useLocalStorage(TOKEN_IN_STORAGE)
   const [userTags, setUserTags] = useState([])
-  const [refPoint, setRefPoint] = useState({    
-    id: '',
-    headerSituation: '',
-    headerSpecification: '',
-    tag: '', 
-    action: '',
-    qualities: ''
-  })
 
   useEffect(function loadUserInfo() {
     async function getCurrentUser() {
@@ -86,7 +77,7 @@ function App() {
         setUserTags
       }}>
         <div>
-          <Nav logout={logout}/>
+          <Navigation logout={logout}/>
           <Routes login={login} signup={signup} />
         </div>
       </UserContext.Provider>

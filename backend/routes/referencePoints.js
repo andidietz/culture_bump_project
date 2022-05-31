@@ -8,9 +8,9 @@ const router = express.Router()
 const Category = require('../models/category')
 const ReferencePoint = require('../models/referencePoint')
 const stepsAddSchema = require('../schemas/stepsAdd.json')
-const {ensureCorrectUser, authenticateJWT} = require('../middleware/auth')
+const {ensureCorrectUser, authenticateJWT, ensureLoggedIn} = require('../middleware/auth')
 
-router.post('/', [authenticateJWT, ensureCorrectUser], async function(req, res, next) {
+router.post('/', [authenticateJWT, ensureLoggedIn], async function(req, res, next) {
     try {
         const validator = jsonschema.validate(req.body, stepsAddSchema)
         if (!validator.valid) {
@@ -44,7 +44,7 @@ router.get('/:id', async function(req, res, next) {
     }
 })
 
-router.get('/categories', [authenticateJWT, ensureCorrectUser], async function(req, res, next) {
+router.get('/categories', async function(req, res, next) {
     try {
         const categories = await Category.getAll()
         return res.json({categories})

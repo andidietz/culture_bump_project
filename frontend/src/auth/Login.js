@@ -1,12 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
-import UserContext from '../context/UserConext'
-import Loading from '../components/Loading'
 import {Button, Form, Card, Container, Row} from 'react-bootstrap'
 
 const Login = ({login}) => {
   const history = useHistory()
-  const {currentUser} = useContext(UserContext)
   const [formErrors, setFormErrors] = useState({})
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [formData, setFormData] = useState({
@@ -36,8 +33,6 @@ const Login = ({login}) => {
 
   const validate = (values) => {
     const errors = {}
-    const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    
     const keys = [
       'username',
       'password'

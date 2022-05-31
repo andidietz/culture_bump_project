@@ -1,5 +1,6 @@
 import React from 'react'
-
+import { Card, Col, Container, Row } from 'react-bootstrap'
+import './ReferencePoint.css'
 const ReferencePoint = ({  
     tag,  
     action, 
@@ -10,24 +11,51 @@ const ReferencePoint = ({
 
   return (
     <div>
-      <div>
-        <h2>Situation</h2>
-        <p>{headerSituation}</p>
+      <Container className='details-componenet'>
+        <Card className="text-center card">
+          <Row className='title'>
+            <Card.Title>Reference Point</Card.Title>
+          </Row>
+          <Row>
+            <Col>
+              <Card.Subtitle>Situation</Card.Subtitle>
+            </Col>
 
-        <h2>Specific Location or Detail</h2>
-        <p>{headerSpecification}</p>
+            <Col>
+              <Card.Subtitle>Specific Location or Detail</Card.Subtitle>
+            </Col>
 
-        <h2>General Shared Reference Group</h2>
-        <p>in {tag}</p>
+            <Col>
+              <Card.Subtitle>General Shared Reference Group</Card.Subtitle>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Card.Body>{headerSituation}</Card.Body>
+            </Col>
 
-        <h2>I would ...</h2>
-        <p>{action}</p>
+            <Col>
+              <Card.Body>{headerSpecification}</Card.Body>
+            </Col>
 
-        <h2>When I do this I am being...</h2>
-        <p>{qualities}</p>
+            <Col>
+              <Card.Body>{tag}</Card.Body>
+            </Col>
+          </Row>
+          <Row className='personal-details-section'>
+              <Card.Subtitle>I would ...</Card.Subtitle>
+              <Card.Body className='spacer'>{action}</Card.Body>
 
-        <h2>How do you express these qualities in your life?</h2>
-      </div>
+              <Card.Subtitle className='spacer'>When I do this, I am being...</Card.Subtitle>
+              <Card.Body>{qualities}</Card.Body>
+          </Row>
+          <Row>
+            <Card.Body className='question-section'>
+              What about you? Think about how you express these qualities in your life?
+            </Card.Body>
+          </Row>
+        </Card>
+      </Container>     
     </div>
   )
 }

@@ -62,7 +62,7 @@ const StepsAddForm = () => {
           username: currentUser.username
         } 
   
-        const updateUserInfo = await CultureBumpApi.addReferencePoint(referencePointData)
+        await CultureBumpApi.addReferencePoint(referencePointData)
         setFormData(formData => ({...formData}))
         
         history.push(`/directory`)
@@ -72,6 +72,7 @@ const StepsAddForm = () => {
   }, [formErrors]) 
   
   const validate = (values) => {
+
     const errors = {}
     const keys = [
       'type',
@@ -111,17 +112,34 @@ const StepsAddForm = () => {
  
   return (
     <div>
-      <Container>
+      <Container className='steps-component'>
         <Row>
+          <h1>8 Steps</h1>
+          <p>
+            Two things happen in the brain when we encounter a differnce. 
+            A mental disconnection (why would they do that?) and a Emotional disconnection
+            (I still feel (insert emotion here) about that situation or person).
+          </p>
+          <p>
+             Studies show there are certain steps that need to happen in order to unhook from our emotions, 
+             work through what happened, and repair the two disconnection that happened at the time 
+             of the culture bump. 
+          </p>
+          <p>
+            The 8 Step tool walks you through those steps and gives you the power to connect and 
+            reconnect with anyone anywhere.
+          </p>
           <Form>
-          <h2>Detach from the culture bump</h2>
-            <Card className="cards">
-              <Card.Title>Step 1: Pinpoint The Culture Bump</Card.Title>
-              <Card>
+          <h3>Detach from the culture bump</h3>
+            <Card>
+              <Row className='tip'>
+                <Card.Title>Step 1: Pinpoint The Culture Bump</Card.Title>
                 <TipCard Tip={<Step1Tips/>}/>    
-              </Card>
+              </Row>    
+
+              <Row className='inputs'>
               <Form.Group>
-                <label>I had a</label>
+                <label>I had a </label>
                 <input
                   id='type'
                   name='type'
@@ -131,7 +149,7 @@ const StepsAddForm = () => {
                   value={formData.type}
                   onChange={handleChange}
                 />
-                <label>culture bump with</label>
+                <label>culture bump with </label>
                 <input
                   id='spark'
                   name='spark'
@@ -154,13 +172,16 @@ const StepsAddForm = () => {
               <Form.Text>{formErrors.type}</Form.Text>
               <Form.Text>{formErrors.spark}</Form.Text>
               <Form.Text>{formErrors.thought}</Form.Text>
+              </Row>
             </Card>
 
-            <Card className="cards">
-              <Card.Title>Step 2: Describe What The Other Person(s) Did</Card.Title>
-                <Card>
-                  <TipCard Tip={<Step2Tips/>}/>    
-                </Card>
+            <Card>
+              <Row className='tip'>
+                <Card.Title>Step 2: Describe What The Other Person(s) Did</Card.Title>
+                <TipCard Tip={<Step2Tips/>}/>    
+              </Row>    
+
+              <Row className='inputs'>
                 <Form.Group>
                   <Form.Label>What did the other person(s) do or say?
                     Or, in case of an object, describe it physically.</Form.Label>
@@ -174,55 +195,64 @@ const StepsAddForm = () => {
                     onChange={handleChange}/>
                   <Form.Text>{formErrors.observation}</Form.Text>
                 </Form.Group>
+              </Row>
             </Card>
  
-            <Card className="cards">
-              <Card.Title>Step 3: Describe What You Did</Card.Title>
-                <Card>
+            <Card>
+                <Row className='tip'>
+                  <Card.Title>Step 3: Describe What You Did</Card.Title>
                   <TipCard Tip={<Step3Tips/>}/>    
-                </Card>
-                <Form.Group>
-                  <Form.Label>What did I do or say?</Form.Label>
-                  <Form.Control
-                    id='response'
-                    name='response'
-                    placeholder=
-                      'ex: I looked at them, sighed, and remained sitting'
-                    type='text'
-                    value={response}
-                    onChange={handleChange}/>
-                  <Form.Text>{formErrors.response}</Form.Text>
-                </Form.Group>
+                </Row>    
+
+                <Row className='inputs'>
+                  <Form.Group>
+                    <Form.Label>What did I do or say?</Form.Label>
+                    <Form.Control
+                      id='response'
+                      name='response'
+                      placeholder=
+                        'ex: I looked at them, sighed, and remained sitting'
+                      type='text'
+                      value={response}
+                      onChange={handleChange}/>
+                    <Form.Text>{formErrors.response}</Form.Text>
+                  </Form.Group>
+                </Row>
             </Card>
  
-            <Card className="cards">
-              <Card.Title>Step 4: List The Emotions You Felt When The Bump Happened</Card.Title>
-                <Card>
+            <Card>
+                <Row className='tip'>
+                  <Card.Title>Step 4: List The Emotions You Felt When The Bump Happened</Card.Title>
                   <TipCard Tip={<Step4Tips/>}/>    
-                </Card>
-                <Form.Group>
-                  <Form.Label>At the time of the culture bump, the emotions I felt were:</Form.Label>
-                  <Form.Control
-                    id='emotions'
-                    name='emotions'
-                    placeholder=
-                      'ex: surprised, nervous, disappointed, out of place'
-                    type='text'
-                    value={emotions}
-                    onChange={handleChange}/>
-                  <Form.Text>{formErrors.emotions}</Form.Text>
-                </Form.Group>
+                </Row>    
+
+                <Row className='inputs'>
+                  <Form.Group>
+                    <Form.Label>At the time of the culture bump, the emotions I felt were:</Form.Label>
+                    <Form.Control
+                      id='emotions'
+                      name='emotions'
+                      placeholder=
+                        'ex: surprised, nervous, disappointed, out of place'
+                      type='text'
+                      value={emotions}
+                      onChange={handleChange}/>
+                    <Form.Text>{formErrors.emotions}</Form.Text>
+                  </Form.Group>
+                </Row>
             </Card>
            
-            <h2>Discover our commonalities</h2>
-            <Card className="cards">
-              <Card.Title>
-                Step 5: Find The Universal Situation In
-                The Incident When It Happened
-              </Card.Title>
-                <Card>
+            <h3>Discover our commonalities</h3>
+            <Card>
+                <Row className='tip'>
+                  <Card.Title>
+                    Step 5: Find The Universal Situation In
+                    The Incident When It Happened
+                  </Card.Title>
                   <TipCard Tip={<Step5Tips/>}/>    
-                </Card>
+                </Row>    
+
+                <Row className='inputs'>
                 <Form.Group>
                   <Form.Label>
                     Now let's find a universal situation for your culture bump.
@@ -241,39 +271,47 @@ const StepsAddForm = () => {
                     onChange={handleChange}/>
                   <Form.Text>{formErrors.universal}</Form.Text>
                 </Form.Group>
+                </Row>
             </Card>
  
-            <Card className="cards"> 
-              <Card.Title>Step 6: List And Describe Specific Actions You
-                Would Do In The Universal Situation From Step 5
-              </Card.Title>
-                <Card>
+            <Card> 
+                <Row className='tip'>
+                  <Card.Title>
+                    Step 6: List And Describe Specific Actions You
+                    Would Do In The Universal Situation From Step 5
+                  </Card.Title>
                   <TipCard Tip={<Step6Tips/>}/>    
-                </Card>
-                <Form.Group>
-                  <Form.Label>List and describe specific actions you would do in the
-                    universal situation from Step 5.
-                  </Form.Label>
-                  <Form.Control
-                    id='action'
-                    name='action'
-                    placeholder=
-                     {`ex: I would complain to my friends and I would find out the
-                      reasons behind the rule, but in the end, I would still follow
-                      the rule anyways`}
-                    type='text'
-                    value={action}
-                    onChange={handleChange}/>
-                  <Form.Text>{formErrors.action}</Form.Text>
-                </Form.Group>
+                </Row>    
+
+                <Row className='inputs'>
+                  <Form.Group>
+                    <Form.Label>List and describe specific actions you would do in the
+                      universal situation from Step 5.
+                    </Form.Label>
+                    <Form.Control
+                      id='action'
+                      name='action'
+                      placeholder=
+                      {`ex: I would complain to my friends and I would find out the
+                        reasons behind the rule, but in the end, I would still follow
+                        the rule anyways`}
+                      type='text'
+                      value={action}
+                      onChange={handleChange}/>
+                    <Form.Text>{formErrors.action}</Form.Text>
+                  </Form.Group>
+                </Row>
             </Card>
  
-            <Card className="cards">
-              <Card.Title>Step 7: List The Qualities That You Feel That Action Demonstrates
-              </Card.Title>
-                <Card>
-                  <TipCard Tip={<Step7Tips/>}/>    
-                </Card>
+            <Card>
+              <Row className='tip'>
+                <Card.Title>
+                  Step 7: List The Qualities That You Feel That Action Demonstrates
+                </Card.Title>
+                <TipCard Tip={<Step7Tips/>}/>    
+              </Row>    
+
+              <Row className='inputs'>
                 <Form.Group>
                   <Form.Label>When people in my culture (or group) do the actions
                     I listed in Step 6, I say they are being:
@@ -288,13 +326,19 @@ const StepsAddForm = () => {
                     onChange={handleChange}/>
                   <Form.Text>{formErrors.qualities}</Form.Text>
                 </Form.Group>
+              </Row>
             </Card>
  
-            <h2>Reconnect beyond the culture bump</h2>
-            <Card className="cards">
-              <Card.Title>Step 8: Ask or think about how those qualities are
-                demonstrated by other people
-              </Card.Title>
+            <h3>Reconnect beyond the culture bump</h3>
+            <Card>
+              <Row className='tip'>
+                <Card.Title>
+                  Step 8: Ask or think about how those qualities are
+                  demonstrated by other people
+                </Card.Title>
+              </Row>    
+
+              <Row className='inputs'>
                 <Form.Group>
                   <Form.Label>
                     How does the other person(s) you had the culture bump with express
@@ -315,8 +359,10 @@ const StepsAddForm = () => {
                     onChange={handleChange}/>
                   <Form.Text>{formErrors.connectionPoint}</Form.Text>
                 </Form.Group>
+              </Row>
             </Card>
-            <Button onClick={handleSubmit}>Click me</Button>
+
+            <Button onClick={handleSubmit}>Save</Button>
           </Form>
         </Row>
       </Container>

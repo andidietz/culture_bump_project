@@ -4,7 +4,7 @@ const jsonschema = require('jsonschema')
 const express = require('express')
 const ExpressError = require('../expressError')
 const router = express.Router()
-const {ensureCorrectUser, authenticateJWT} = require('../middleware/auth')
+const {ensureCorrectUser, authenticateJWT, ensureLoggedIn} = require('../middleware/auth')
 
 const ReferencePoint = require('../models/referencePoint')
 const Category = require('../models/category')
@@ -15,7 +15,7 @@ const Tag = require('../models/tag')
 const stepsAddSchema = require('../schemas/stepsAdd.json')
 const User = require('../models/user')
 
-router.post('/',  [authenticateJWT, ensureCorrectUser], async function(req, res, next) {
+router.post('/',  [authenticateJWT, ensureLoggedIn], async function(req, res, next) {
     try {
         const validator = jsonschema.validate(req.body, stepsAddSchema)
         
@@ -32,7 +32,7 @@ router.post('/',  [authenticateJWT, ensureCorrectUser], async function(req, res,
     }
 })
 
-router.patch('/:id',  [authenticateJWT, ensureCorrectUser], async function(req, res, next) {
+router.patch('/:id',  [authenticateJWT, ensureLoggedIn], async function(req, res, next) {
     try {
         let formatedData = {}
 
@@ -149,7 +149,7 @@ router.get('/:id', async function(req, res, next) {
     }
 })
 
-router.delete('/:id', [authenticateJWT, ensureCorrectUser], async function(req, res, next) {
+router.delete('/:id', [authenticateJWT, ensureLoggedIn], async function(req, res, next) {
     try {
         await ReferencePoint.remove(req.params.id)
         return res.json({deleted: req.params.id})

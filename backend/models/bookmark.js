@@ -7,7 +7,6 @@ class Bookmark {
             `INSERT INTO bookmarks (user_id, reference)
             VALUES ($1, $2)`, [username, referencPointId]
         )
-        // QUESTION: does this need a return statement in query or in function?
         const bookmark = results.rows[0]
         return bookmark
     }

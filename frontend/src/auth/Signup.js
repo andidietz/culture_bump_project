@@ -1,11 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
-import UserContext from '../context/UserConext'
 import {Button, Form, Card, Container, Row} from 'react-bootstrap'
 
 const Signup = ({signup}) => {
   const history = useHistory()
-  const {currentUser} = useContext(UserContext)
   const [formErrors, setFormErrors] = useState({})
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [formData, setFormData] = useState({
@@ -19,17 +17,18 @@ const Signup = ({signup}) => {
   useEffect(() => {
     async function submitToServer() {
       if(Object.keys(formErrors).length === 0 && isSubmitted) {
-        const result = await signup(formData)
 
-        if (result.sucess) {
-          setFormData(formData => ({...formData, password: ''}))
-          history.push(`/users/${formData.username}`)
-        } else {
-          setFormErrors(formErrors => ({
-            ...formErrors,
-            result: true
-        }))
-        }
+          const result = await signup(formData)
+
+          if (result.sucess) {
+            setFormData(formData => ({...formData, password: ''}))
+            history.push(`/users/${formData.username}`)
+          } else {
+            setFormErrors(formErrors => ({
+              ...formErrors,
+              result: 'Username or Email already in use'
+            }))
+          }
       }
     }
     submitToServer()
@@ -37,7 +36,7 @@ const Signup = ({signup}) => {
 
   const validate = (values) => {
     const errors = {}
-    const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     
     if (!values.name) {
       errors.name = "Required"
@@ -89,8 +88,11 @@ const Signup = ({signup}) => {
         <Row className="justify-content-center">
         <Card className='border d-flex align-items-center justify-content-center' style={{ width: '18rem' }}>
         <Card.Body>
+          
           <Card.Title>Sign up</Card.Title>
           <Form onSubmit={handleSubmit}>
+          <Form.Text>{formErrors.result}</Form.Text>   
+
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
               <Form.Control 

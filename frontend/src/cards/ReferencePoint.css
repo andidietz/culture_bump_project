@@ -1,0 +1,28 @@
+.details-componenet {
+  margin: 2rem;
+  padding: 1rem
+}
+
+.card {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.title {
+  padding-bottom: 3rem;
+}
+
+.spacer {
+  padding-top: 2rem;
+}
+
+.personal-details-section {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.question-section {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  font-style: italic
+}

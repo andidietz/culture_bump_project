@@ -68,28 +68,6 @@ class Subcategory {
         return headers
     }
 
-
-    // static async get(id) {
-    //     const results = await db.query(
-    //         `SELECT subcategory
-    //         FROM subcategories
-    //         WHERE id = $1`, [id])
-
-    //     const subcategory = results.row[0]
-    //     return subcategory
-    // }
-
-    // static async update(id, subcategory) {
-    //     const results = await db.query(
-    //         `UPDATE subcategories
-    //         SET subcategory = $2
-    //         WHERE id = $1
-    //         RETURNING subcategory`, [subcategory])
-
-    //     const subcategory = results.rows[0]
-    //     return subcategory
-    // }
-
     static async remove(id) {
         const results = await db.query(
             `DELETE

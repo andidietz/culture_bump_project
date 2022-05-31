@@ -31,17 +31,6 @@ class HeaderSituation {
         return headerSituation
     }
 
-    // static async update(id, headerSituation) {
-    //     const results = await db.query(
-    //         `UPDATE header_situations
-    //         SET header_situation = $2
-    //         WHERE id = $1
-    //         RETURNING header_situation`, [id, headerSituation])
-
-    //     const headerSituation = results.rows[0]
-    //     return headerSituation
-    // }
-
     static async remove(id) {
         const results = await db.query(
             `DELETE
