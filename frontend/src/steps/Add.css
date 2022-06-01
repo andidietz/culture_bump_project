@@ -17,6 +17,10 @@
   padding: 1rem 1rem 0rem 1rem;
 }
 
+.input-labels {
+  padding: 1rem 0rem 0rem 0rem;
+}
+
 h1, h2,  h3, p {
   display: flex;
   flex-direction: column;

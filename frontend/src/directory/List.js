@@ -32,11 +32,6 @@ const DirectoryList = () => {
 
         </Row>
       </Container>
-
-
-      {/* {categories && categories.map(
-        ({category, id}) => <Category category={category} id={id}/>)
-      } */}
     </div>
   )
 }

@@ -110,6 +110,7 @@ const StepsAddForm = () => {
     }))
   }
  
+  console.log('formData', formData)
   return (
     <div>
       <Container className='steps-component'>
@@ -139,34 +140,31 @@ const StepsAddForm = () => {
 
               <Row className='inputs'>
               <Form.Group>
-                <label>I had a </label>
-                <input
-                  id='type'
-                  name='type'
-                  placeholder='ex: positive'
-                  type='text'
-                  required
-                  value={formData.type}
-                  onChange={handleChange}
-                />
-                <label>culture bump with </label>
-                <input
-                  id='spark'
-                  name='spark'
-                  placeholder='ex: person(s) or object(s)'
-                  type='text'
-                  value={formData.spark}
-                  onChange={handleChange}
-                />
-                <label>and I thought that was</label>
-                <input
-                  id='thought'
-                  name='thought'
-                  placeholder='ex: surprising, rude, cute, etc.'
-                  type='text'
-                  value={formData.thought}
-                  onChange={handleChange}
-                />
+                <Form.Label>I had a</Form.Label>
+                <Form.Select id='type' name='type' aria-label="Default select example" onChange={handleChange}>
+                  <option>Choose one:</option>
+                  <option value="Positive">Positive</option>
+                  <option value="Negative">Negative</option>
+                  <option value="Neutral">Neutral</option>
+                </Form.Select>
+              
+                <Form.Label className='input-labels'>culture bump with</Form.Label>
+                  <Form.Control
+                    id='spark'
+                    name='spark'
+                    placeholder='ex: person(s) or object(s)'
+                    type='text'
+                    value={formData.spark}
+                    onChange={handleChange}/>
+
+                <Form.Label className='input-labels'>and I thought that was</Form.Label>
+                  <Form.Control
+                    id='thought'
+                    name='thought'
+                    placeholder='ex: surprising, rude, cute, etc.'
+                    type='text'
+                    value={formData.thought}
+                    onChange={handleChange}/>
               </Form.Group>
            
               <Form.Text>{formErrors.type}</Form.Text>
@@ -292,9 +290,7 @@ const StepsAddForm = () => {
                       id='action'
                       name='action'
                       placeholder=
-                      {`ex: I would complain to my friends and I would find out the
-                        reasons behind the rule, but in the end, I would still follow
-                        the rule anyways`}
+                      {`ex: I would complain to my friends, but would still follow the rule anyways.`}
                       type='text'
                       value={action}
                       onChange={handleChange}/>
@@ -350,10 +346,7 @@ const StepsAddForm = () => {
                     id='connectionPoint'
                     name='connectionPoint'
                     placeholder=
-                      {`ex: I never thought about that. I have seen them complete their part
-                      of work projects always on time. Maybe that's how they like showing
-                      trustworthiness. This might be a interesting conversation to have during
-                      break time next week`}
+                      {`ex: I never thought about that.`}
                     type='text'
                     value={connectionPoint}
                     onChange={handleChange}/>

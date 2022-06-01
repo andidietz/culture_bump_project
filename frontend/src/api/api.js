@@ -78,7 +78,10 @@ class CultureBumpApi {
   }
 
   static async deleteReferencePoint(id) {
+    console.log('hitting deleted')
+
     const res = await this.request(`directory/${id}`, id, 'delete')
+    console.log('deleted')
     return res.referencePoint
   }
 

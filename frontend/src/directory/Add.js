@@ -5,7 +5,7 @@ import UserContext from '../context/UserConext'
 import CultureBumpApi from '../api/api'
 import Loading from '../components/Loading'
 import "react-widgets/styles.css"
-import Combobox from "react-widgets/Combobox"
+import {Combobox, DropdownList} from "react-widgets"
 import { Container, Form, Row, Col, Card, Button} from 'react-bootstrap'
 
 
@@ -217,27 +217,25 @@ const DirectoryAdd = () => {
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>
+            <Form.Label>
                 Is this an action typically shared by one of your reference group?
                  If so, which one?
               </Form.Label>
               <Form.Label>In</Form.Label>
-              <Combobox 
-                data={headerValues.userTags}
-                dataKey='id'
-                textField='tag'
-                placeholder='Japan'
-                filter='contains'
-                hideEmptyPopup 
-                autoSelectMatches
-                onChange={(param) => {
-                  setFormData(formData => ({
-                      ...formData,
-                      tag: param
-                  }))
-                }}
-              />
+            <DropdownList
+              data={headerValues.userTags}
+              dataKey='id'
+              textField='tag'
+              placeholder='United States'
+              onChange={(param) => {
+                setFormData(formData => ({
+                    ...formData,
+                    tag: param
+                }))
+              }}
+            />
             </Form.Group>
+            
             {titleComponents ? titleComponents : <p>please fill out all of the above questions</p>}
             <Button onClick={formatTitle}>Format Title</Button>
           
