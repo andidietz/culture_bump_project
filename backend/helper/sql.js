@@ -14,4 +14,9 @@ const sqlForPartialUpdate = (dataToUpdate, jsToSql) => {
   }
 }
 
-module.exports = {sqlForPartialUpdate}
+
+const checkIfNoValues = () => {
+
+}
+
+module.exports = {checkIfNoValues, sqlForPartialUpdate}

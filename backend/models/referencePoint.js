@@ -1,5 +1,7 @@
 const db = require('../db')
 const ExpressError = require('../expressError')
+const {checkIfNoValues} = require('../helper/sql')
+
 
 class ReferencePoint {
   static async update({
@@ -128,6 +130,66 @@ class ReferencePoint {
     return referencePoint
   }
 
+  static async getHeaderIds(id) {
+    const results = await db.query(
+      `SELECT inDirectory,
+        header_situation_id AS headerSituationId,
+        header_specification_id AS headerSpecificationId,
+        category_id AS categoryId,
+        subcategory_id AS subcategoryId
+      FROM reference_points
+      WHERE id = $1`, [id]
+    )
+    const headerIds = results.rows[0]
+
+    return headerIds
+  }
+
+  
+  static async checkIfAnyHaveSubcategory(subcategoryid) {
+    const results = await db.query(
+      `SELECT id
+      FROM reference_points
+      WHERE subcategory_id = $1`, [subcategoryid]
+    )
+    const referencePoint = results.rows[0]
+
+    return referencePoint
+  }
+
+  static async checkIfAnyHaveCategory(categoryid) {
+    const results = await db.query(
+      `SELECT id
+      FROM reference_points
+      WHERE category_id = $1`, [categoryid]
+    )
+    const referencePoint = results.rows[0]
+
+    return referencePoint
+  }
+
+  static async checkIfAnyHaveHeaderSituation(headersituationid) {
+    const results = await db.query(
+      `SELECT id
+      FROM reference_points
+      WHERE header_situation_id = $1`, [headersituationid]
+    )
+    const referencePoint = results.rows[0]
+
+    return referencePoint
+  }
+
+  static async checkIfAnyHaveHeaderSpecification(headerspecificationid) {
+    const results = await db.query(
+      `SELECT id
+      FROM reference_points
+      WHERE header_specification_id = $1`, [headerspecificationid]
+    )
+    const referencePoint = results.rows[0]
+
+    return referencePoint
+  }
+
   static async getBySubcategory({subcategoryId, categoryId}) {
     const results = await db.query(
       `SELECT r.id,
@@ -208,6 +270,7 @@ class ReferencePoint {
 
     return referencePoint
   }
+  
 
   static async remove(id) {
     const results = await db.query(

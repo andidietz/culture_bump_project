@@ -151,7 +151,32 @@ router.get('/:id', async function(req, res, next) {
 
 router.delete('/:id', [authenticateJWT, ensureLoggedIn], async function(req, res, next) {
     try {
+        const headerIds = await ReferencePoint.getHeaderIds(req.params.id)
         await ReferencePoint.remove(req.params.id)
+
+        if (headerIds.indirectory) {
+            const subcategoryResults = await ReferencePoint.checkIfAnyHaveSubcategory(headerIds.subcategoryid)
+            const categoryResults = await ReferencePoint.checkIfAnyHaveCategory(headerIds.categoryid)
+            const headerSituationResults = await ReferencePoint.checkIfAnyHaveHeaderSituation(headerIds.headersituationid)
+            const headerSpecificationResults = await ReferencePoint.checkIfAnyHaveHeaderSpecification(headerIds.headerspecificationid)
+        
+            if (categoryResults === undefined) {
+                await Category.remove(headerIds.categoryid)
+            }  
+    
+            if (subcategoryResults === undefined) {
+                await Subcategory.remove(headerIds.subcategoryid)
+            }  
+    
+            if (headerSituationResults === undefined) {
+                await HeaderSituation.remove(headerIds.headersituationid)
+            }  
+    
+            if (headerSpecificationResults === undefined) {
+                await HeaderSpecification.remove(headerIds.headerspecificationid)
+            }
+        }
+
         return res.json({deleted: req.params.id})
     } catch (err) {
         return next(err)
