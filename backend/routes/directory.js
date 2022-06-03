@@ -71,7 +71,6 @@ router.patch('/:id',  [authenticateJWT, ensureLoggedIn], async function(req, res
         formatedData.id = req.params.id
         formatedData.indirectory = true
 
-
         const referencePointId = await ReferencePoint.update(formatedData)
 
         return res.json({referencePointId})
@@ -106,6 +105,7 @@ router.get('/header/:username', async function(req, res, next) {
 router.get('/categories', async function(req, res, next) {
     try {
         const categories = await Category.getAll()
+
         return res.json({categories})
     } catch (err) {
         return next(err)
@@ -115,6 +115,7 @@ router.get('/categories', async function(req, res, next) {
 router.get('/categories/:id', async function(req, res, next) {
     try {
         const subcategories = await Subcategory.getAllByCategoryId(req.params.id)
+
         return res.json({subcategories})
     } catch (err) {
         return next(err)
@@ -124,6 +125,7 @@ router.get('/categories/:id', async function(req, res, next) {
 router.get('/categories/:categoryId/subcategories/:subcategoryId', async function(req, res, next) {
     try {
         const headers = await Subcategory.getHeadersBySubcategoryId(req.params.categoryId, req.params.subcategoryId)
+
         return res.json({headers})
     } catch (err) {
         return next(err)
@@ -133,6 +135,7 @@ router.get('/categories/:categoryId/subcategories/:subcategoryId', async functio
 router.get('/tags', async function(req, res, next) {
     try {
         const tags = await Tag.getAll()
+
         return res.json({tags})
     } catch (err) {
         return next(err)
@@ -143,6 +146,7 @@ router.get('/tags', async function(req, res, next) {
 router.get('/:id', async function(req, res, next) {
     try {
         const referencePoint = await ReferencePoint.getSpecificReferencePointInfoById(req.params.id)
+
         return res.json({referencePoint})
     } catch(err) {
         return next(err)

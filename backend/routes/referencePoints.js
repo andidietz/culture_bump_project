@@ -38,6 +38,7 @@ router.get('/', async function(req, res, next) {
 router.get('/:id', async function(req, res, next) {
   try {
     const referencePoint = await ReferencePoint.getBasicReferencePointInfoById(req.params.id)
+
     return res.json({referencePoint})
   } catch(err) {
     return next(err)

@@ -24,7 +24,7 @@ router.post('/register', async function(req, res, next) {
 
         const user = await User.register(req.body)
         const token = createToken(user)
-        
+
         return res.status(201).json({token})
     } catch (err) {
         return next(err)
@@ -50,19 +50,10 @@ router.post('/token', async function(req, res, next) {
     }
 })
 
-router.get('/tags', ensureLoggedIn, async function(req, res, next) {
-    try {
-        const tags = await Tag.getAll()
-        return res.json({tags})
-    } catch (err) {
-        return next(err)
-    }
-})
-
-
 router.patch('/:username', [authenticateJWT, ensureCorrectUser], async function (req, res, next) {
     try {
         const user = await User.update(req.params.username, req.body)
+
         return res.json({user})
     } catch (err) {
         return next(err)
@@ -72,6 +63,7 @@ router.patch('/:username', [authenticateJWT, ensureCorrectUser], async function 
 router.get('/:username', [authenticateJWT, ensureCorrectUser], async function(req, res, next) {
     try {
         const user = await User.get(req.params.username)
+
         return res.json({user})
     } catch (err) {
         return next(err)
@@ -81,6 +73,7 @@ router.get('/:username', [authenticateJWT, ensureCorrectUser], async function(re
 router.get('/:username/referencePoints', [authenticateJWT, ensureCorrectUser], async function(req, res, next) {
     try {
         const referencePoints = await User.getUserReferencePoints(req.params.username)
+
         return res.json({referencePoints})
     } catch (err) {
         return next(err)
@@ -113,6 +106,7 @@ router.post('/:username/tags', [authenticateJWT, ensureCorrectUser], async funct
         }
         
         const tag = await User.addUserTag(tagInfo)
+
         return res.status(201).json({tag})
     } catch (err) {
         return next(err)
@@ -122,6 +116,7 @@ router.post('/:username/tags', [authenticateJWT, ensureCorrectUser], async funct
 router.delete('/:username', [authenticateJWT, ensureCorrectUser], async function(req, res, next) {
     try {
         await User.remove(req.params.username)
+
         return res.json({deleted: req.params.username})
     } catch (err) {
         return next(err)

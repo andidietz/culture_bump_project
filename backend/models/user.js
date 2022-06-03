@@ -51,6 +51,7 @@ class User {
         name: 'name'
       }         
     )
+
     const usernameVarIdx = "$" + (values.length + 1)
     const querySql = `UPDATE users 
                       SET ${setCols} 
@@ -78,7 +79,6 @@ class User {
 
     return tag
 }
-
 
   static async get(username) {
     const results = await db.query(
