@@ -42,6 +42,10 @@ To access their saved form submission, they can use the **Navbar** to navigate t
 * React Bootstrap
 * React Widgets
 
+# Tests
+### Run Tests
+`jest`
+
 # API
 ## **USER ENDPOINTS**
 ### POST REQUESTS
