@@ -25,9 +25,8 @@ function App() {
       if (token) {
         try {
           const {username} = jwt.decode(token)
-
+          
           CultureBumpApi.token = token
-
           const currentUser = await CultureBumpApi.getCurrentUser(username)
 
           setCurrentUser(currentUser)

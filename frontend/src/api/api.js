@@ -55,6 +55,7 @@ class CultureBumpApi {
 
   static async updateProfile(username, data) {
     const res = await this.request(`users/${username}`, data, 'patch')
+
     return res.user
   }
 
@@ -78,10 +79,7 @@ class CultureBumpApi {
   }
 
   static async deleteReferencePoint(id) {
-    console.log('hitting deleted')
-
     const res = await this.request(`directory/${id}`, id, 'delete')
-    console.log('deleted')
     return res.referencePoint
   }
 

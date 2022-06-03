@@ -110,7 +110,6 @@ const StepsAddForm = () => {
     }))
   }
  
-  console.log('formData', formData)
   return (
     <div>
       <Container className='steps-component'>

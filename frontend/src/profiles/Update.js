@@ -9,7 +9,7 @@ import './Update.css'
 const ProfileUpdate = () => {
   const history = useHistory()
 
-  const {currentUser, userTags, setUserTags}  = useContext(UserContext)
+  const {currentUser, setCurrentUser, userTags, setUserTags}  = useContext(UserContext)
   const [allTags, setAllTags] = useState([])
   const [formErrors, setFormErrors] = useState({})
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -77,7 +77,9 @@ const ProfileUpdate = () => {
 
         if (result.username) {
           setFormData(formData => ({...formData, password: ''}))
-      
+          
+          const user = await CultureBumpApi.getCurrentUser(username)
+          setCurrentUser(user)
           history.push(`/users/${username}`)
         } else {
           setFormErrors(formErrors => ({

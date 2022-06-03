@@ -67,7 +67,7 @@ const Profile = () => {
     )
   }
 
-  if (!userReferencePoints && !userTags && !currentUser) return <Loading/>
+  if (!currentUser && !userReferencePoints && !userTags) return <Loading/>
 
   const {username, name, email} = currentUser
   
